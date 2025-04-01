@@ -4,7 +4,7 @@ import pool from '../config/db';
 export async function getCreditHistories(req: Request, res: Response) {
 	try {
 		const result = await pool.query('SELECT * FROM credit_history');
-		res.status(200).json({ credit_histories: result.rows });
+		res.status(200).json(result.rows);
 	} catch (err: any) {
 		res.status(500).json({ error: err.message });
 	}
