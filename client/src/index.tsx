@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router';
 
 import App from './App';
 
@@ -10,5 +11,9 @@ if (!index) {
 } else {
 	const root = createRoot(index);
 
-	root.render(<App />);
+	root.render(
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	);
 }

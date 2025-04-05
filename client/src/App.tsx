@@ -1,33 +1,58 @@
 import React, { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router';
+import {
+	TClient,
+	TClients,
+	TContract,
+	TContracts,
+	TCredit,
+	TCreditHistories,
+	TCreditHistory,
+	TCredits,
+} from 'types';
 
-import Main from '@components/main/Main';
+import { Footer } from '@components/footer';
+import { Header } from '@components/header';
+import { Main } from '@components/main';
 
-export type TClient = {
-	age: number;
-	firstname: string;
-	id_client: number;
-	id_credit_history: number;
-	income: number;
-	lastname: string;
-	patronymic: string;
-	seniority: string;
-};
+import { camelizeData } from '@utils/camelizeData';
 
-export type TClients = TClient[];
+import { Global, Wrapper } from './App.styled';
 
 const App = () => {
 	const [clients, setClients] = useState<TClients>([]);
+	const [credits, setCredits] = useState<TCredits>([]);
+	const [contracts, setContracts] = useState<TContracts>([]);
+	const [creditHistories, setCreditHistories] = useState<TCreditHistories>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				let response = await fetch(`http://${process.env.HOST_NAME}/api/clients`);
+				const [clientsRes, creditsRes, contractsRes, historiesRes] = await Promise.all([
+					fetch(`http://${process.env.SERVER_HOST_NAME}/api/clients`),
+					fetch(`http://${process.env.SERVER_HOST_NAME}/api/credits`),
+					fetch(`http://${process.env.SERVER_HOST_NAME}/api/contracts`),
+					fetch(`http://${process.env.SERVER_HOST_NAME}/api/credit-histories`),
+				]);
 
-				if (response.ok) {
-					setClients(await response.json());
-				}
-			} catch (e) {
-				console.error(e);
+				const [clients, credits, contracts, creditHistories] = await Promise.all([
+					clientsRes.json(),
+					creditsRes.json(),
+					contractsRes.json(),
+					historiesRes.json(),
+				]);
+
+				const camelizedClients = camelizeData<TClient>(clients);
+				const camelizedCredits = camelizeData<TCredit>(credits);
+				const camelizedContracts = camelizeData<TContract>(contracts);
+				const camelizedCreditHistories = camelizeData<TCreditHistory>(creditHistories);
+
+				setClients(camelizedClients);
+				setCredits(camelizedCredits);
+				setContracts(camelizedContracts);
+				setCreditHistories(camelizedCreditHistories);
+			} catch (error) {
+				console.error(error);
 			}
 		};
 
@@ -35,14 +60,27 @@ const App = () => {
 	}, []);
 
 	return (
-		<div>
-			<h2>Список клиентов</h2>
-			<div>
-				{clients.map((client) => (
-					<Main key={client.id_client} client={client}></Main>
-				))}
-			</div>
-		</div>
+		<>
+			<Global />
+			<Wrapper>
+				<Header />
+				<Routes>
+					<Route index element={<Main />}></Route>
+					<Route
+						path='/analytic'
+						element={
+							<Main
+								clients={clients}
+								credits={credits}
+								contracts={contracts}
+								creditHistories={creditHistories}
+							/>
+						}
+					></Route>
+				</Routes>
+				<Footer />
+			</Wrapper>
+		</>
 	);
 };
 
