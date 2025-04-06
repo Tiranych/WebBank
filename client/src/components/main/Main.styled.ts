@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { footerBackgroundColor, mainBackgroundColor } from '@utils/variables';
 
 export const Wrapper = styled.main`
-	display: flex;
-	justify-content: center;
 	color: ${footerBackgroundColor};
 	background-color: ${mainBackgroundColor};
 `;
 
 export const Section = styled.section`
+	display: flex;
+	justify-content: center;
 	padding: 30px 0;
 `;
 
