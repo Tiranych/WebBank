@@ -22,7 +22,7 @@ const Main = ({ clients, credits, contracts, creditHistories }: MainProps) => {
 			{location === '/' && (
 				<Section>
 					<Container>
-						<Title>Заполните заявку для получения кредита!</Title>
+						<Title>Заполните заявку для получения кредита</Title>
 						<Form />
 					</Container>
 				</Section>

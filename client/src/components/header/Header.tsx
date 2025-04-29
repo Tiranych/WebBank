@@ -10,7 +10,7 @@ const Header = () => {
 		<Wrapper>
 			<Container>
 				<Logo href='/'>
-					<Img src='../../assets/favicon.svg' alt='Logo' />
+					<Img src='./assets/favicon.svg' alt='Logo' />
 					<Title>WebBank</Title>
 				</Logo>
 				<Subtitle>Быстрый сервис для получения кредита!</Subtitle>

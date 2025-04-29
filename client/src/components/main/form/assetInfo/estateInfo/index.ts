@@ -1,0 +1,1 @@
+export { EstateInfo } from './EstateInfo';
