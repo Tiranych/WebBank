@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import pool from '../config/db';
+import db from '../config/db';
 
 export async function getCreditHistories(req: Request, res: Response) {
 	try {
-		const result = await pool.query('SELECT * FROM credit_history');
+		const result = await db.query('SELECT * FROM credit_history');
 		res.status(200).json(result.rows);
 	} catch (err: any) {
 		res.status(500).json({ error: err.message });
@@ -13,7 +13,7 @@ export async function getCreditHistories(req: Request, res: Response) {
 export async function createCreditHistory(req: Request, res: Response) {
 	const { rating, debtLoad } = req.body;
 	try {
-		const result = await pool.query(
+		const result = await db.query(
 			'INSERT INTO credit_history (rating, debt_load) VALUES ($1, $2) RETURNING *',
 			[rating, debtLoad]
 		);
@@ -27,7 +27,7 @@ export async function createCreditHistory(req: Request, res: Response) {
   const { id } = req.params;
   const { idClient, idContract } = req.body;
   try {
-    const result = await pool.query(
+    const result = await db.query(
       "UPDATE contract SET id_client = $1, id_contract = $2 WHERE id_credit = $3 RETURNING *",
       [idClient, idContract, id]
     );
@@ -40,7 +40,7 @@ export async function createCreditHistory(req: Request, res: Response) {
 export async function deleteCreditHistory(req: Request, res: Response) {
 	const { id } = req.params;
 	try {
-		await pool.query('DELETE FROM credit_history WHERE id_credit_history = $1', [id]);
+		await db.query('DELETE FROM credit_history WHERE id_credit_history = $1', [id]);
 		res.status(204).send();
 	} catch (err: any) {
 		res.status(500).json({ error: err.message });

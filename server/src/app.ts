@@ -7,7 +7,9 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:8080' }));
 
-app.use('/api', routes);
+app.use(express.urlencoded({ extended: true }));
+
+app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	console.error(err.stack);

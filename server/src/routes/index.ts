@@ -12,27 +12,30 @@ import {
 	deleteCreditHistory,
 	getCreditHistories,
 } from '../controllers/creditHistoryController';
+import { handleFormController } from '../controllers/handleFormController';
 
 const router = Router();
 
-router.get('/credits', getCredits);
-router.post('/credits', createCredit);
-router.put('/credits/:id', updateCredit);
-router.delete('/credits/:id', deleteCredit);
+router.post('/form', handleFormController);
 
-router.get('/contracts', getContracts);
-router.post('/contracts', createContract);
-//router.put("/contracts/:id", updateContract);
-router.delete('/contracts/:id', deleteContract);
+router.get('/api/credits', getCredits);
+router.post('/api/credits', createCredit);
+router.put('/api/credits/:id', updateCredit);
+router.delete('/api/credits/:id', deleteCredit);
 
-router.get('/clients', getClients);
-router.post('/clients', createClient);
-//router.put("/clients/:id", updateClient);
-router.delete('/clients/:id', deleteClient);
+router.get('/api/contracts', getContracts);
+router.post('/api/contracts', createContract);
+//router.put("/api/contracts/:id", updateContract);
+router.delete('/api/contracts/:id', deleteContract);
 
-router.get('/credit-histories', getCreditHistories);
-router.post('/credit-history', createCreditHistory);
-//router.put("/credit-history/:id", updateCreditHistory);
-router.delete('/credit-history/:id', deleteCreditHistory);
+router.get('/api/clients', getClients);
+router.post('/api/clients', createClient);
+//router.put("/api/clients/:id", updateClient);
+router.delete('/api/clients/:id', deleteClient);
+
+router.get('/api/credit-histories', getCreditHistories);
+router.post('/api/credit-history', createCreditHistory);
+//router.put("/api/credit-history/:id", updateCreditHistory);
+router.delete('/api/credit-history/:id', deleteCreditHistory);
 
 export default router;
