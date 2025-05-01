@@ -12,7 +12,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 
 	const { fields, append, remove } = useFieldArray({
 		control,
-		name: 'assets_estate',
+		name: 'assetsEstate',
 	});
 
 	useEffect(() => {
@@ -37,7 +37,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 						<Inner>
 							<Controller
 								control={control}
-								name={`assets_estate.${index}.type`}
+								name={`assetsEstate.${index}.type`}
 								rules={{
 									required: 'Обязательное поле',
 									validate: (value) =>
@@ -64,11 +64,13 @@ export const EstateInfo = ({ step }: { step: number }) => {
 													}}
 												/>
 												<datalist id='estateList'>
-													<option value={EstateTypes['FLAT']} />
-													<option value={EstateTypes['HOUSE']} />
-													<option value={EstateTypes['OFFICE']} />
-													<option value={EstateTypes['LAND_PLOT']} />
-													<option value={EstateTypes['GARAGE']} />
+													{Object.values(EstateTypes).map(
+														(item, index) => {
+															return (
+																<option key={index} value={item} />
+															);
+														}
+													)}
 												</datalist>
 												<ErrorText $enabled={!!error}>
 													{error?.message}
@@ -82,7 +84,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 						<Inner>
 							<Controller
 								control={control}
-								name={`assets_estate.${index}.square`}
+								name={`assetsEstate.${index}.square`}
 								rules={{
 									required: 'Обязательное поле',
 								}}
@@ -126,7 +128,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 						<Inner>
 							<Controller
 								control={control}
-								name={`assets_estate.${index}.address`}
+								name={`assetsEstate.${index}.address`}
 								rules={{
 									required: 'Обязательное поле',
 								}}
@@ -161,7 +163,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 						<Inner>
 							<Controller
 								control={control}
-								name={`assets_estate.${index}.price`}
+								name={`assetsEstate.${index}.price`}
 								rules={{
 									required: 'Обязательное поле',
 								}}

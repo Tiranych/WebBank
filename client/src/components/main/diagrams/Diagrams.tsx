@@ -8,7 +8,7 @@ import { AgeDiagram } from './ageDiagram';
 import { IncomeDiagram } from './incomeDiagram';
 
 type DiagramProps = {
-	clients: TClients;
+	clients: any;
 	credits: TCredits;
 	contracts: TContracts;
 	creditHistories: TCreditHistories;

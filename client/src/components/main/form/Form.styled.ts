@@ -63,8 +63,15 @@ export const Inner = styled.div`
 	align-items: center;
 `;
 
+export const RadioBox = styled.div`
+	display: flex;
+	align-items: center;
+	gap: 0 10px;
+`;
+
 export const Input = styled.input<{ $shortInput?: boolean; $longInput?: boolean }>`
 	font-size: 20px;
+	width: 285px;
 	padding: 5px 10px;
 	border-radius: 5px;
 	${({ $shortInput }) => $shortInput && 'max-width: 200px;'}

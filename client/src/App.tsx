@@ -15,19 +15,22 @@ import { Footer } from '@components/footer';
 import { Header } from '@components/header';
 import { Main } from '@components/main';
 
-import { camelizeData } from '@utils/camelizeData';
+import { camelizeData } from '@utils/camelize';
 
-import { Global, Wrapper } from './App.styled';
+import { Global, Overlay, Wrapper } from './App.styled';
 
 const App = () => {
 	const [clients, setClients] = useState<TClients>([]);
 	const [credits, setCredits] = useState<TCredits>([]);
 	const [contracts, setContracts] = useState<TContracts>([]);
 	const [creditHistories, setCreditHistories] = useState<TCreditHistories>([]);
+	const [showModal, setShowModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				setIsLoading(true);
 				const [clientsRes, creditsRes, contractsRes, historiesRes] = await Promise.all([
 					fetch(`http://${process.env.SERVER_HOST_NAME}/api/clients`),
 					fetch(`http://${process.env.SERVER_HOST_NAME}/api/credits`),
@@ -53,6 +56,8 @@ const App = () => {
 				setCreditHistories(camelizedCreditHistories);
 			} catch (error) {
 				console.error(error);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 
@@ -62,21 +67,32 @@ const App = () => {
 	return (
 		<>
 			<Global />
+			<Overlay $isShowOverlay={showModal || isLoading} />
 			<Wrapper>
 				<Header />
 				<Routes>
-					<Route index element={<Main />}></Route>
 					<Route
-						path='/analytic'
+						index
 						element={
 							<Main
-								clients={clients}
-								credits={credits}
-								contracts={contracts}
-								creditHistories={creditHistories}
+								showModal={showModal}
+								setShowModal={setShowModal}
+								isLoading={isLoading}
+								setIsLoading={setIsLoading}
 							/>
 						}
 					></Route>
+					{/* <Route
+							path='/analytic'
+							element={
+								<Main
+									clients={clients}
+									credits={credits}
+									contracts={contracts}
+									creditHistories={creditHistories}
+								/>
+							}
+						></Route> */}
 				</Routes>
 				<Footer />
 			</Wrapper>

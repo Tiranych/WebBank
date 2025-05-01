@@ -1,3 +1,12 @@
+import { mainColor, majorBlue } from './variables';
+
+type MaritalKeys = 'MARRIED' | 'DIVORCED' | 'SINGLE' | 'WIDOW' | 'CIVIL';
+type EducationKeys =
+	| 'INCOMPLETE_SECONDARY'
+	| 'INCOMPLETE_HIGHER'
+	| 'ACADEMIC_DEGREE'
+	| 'MEDIUM'
+	| 'HIGHER';
 type WorkStatusKeys =
 	| 'SELF_EMPLOYED'
 	| 'WORK_FOR_HIRE'
@@ -10,6 +19,22 @@ type EstateKeys = 'FLAT' | 'HOUSE' | 'OFFICE' | 'LAND_PLOT' | 'GARAGE';
 type ScheduleKeys = 'ANNUITIES' | 'DIFFERENTIATED';
 type PurposeKeys = 'CAR_PURCHASE' | 'ESTATE_PURCHASE' | 'CONSUMER_PURPOSE';
 type ProvisionKeys = 'ESTATE' | 'TRANSPORT' | 'GUARANTEE' | 'BILL' | 'NO_PROVISION';
+
+export const MaritalStatuses: Record<MaritalKeys, string> = {
+	MARRIED: 'Женат (замужем)',
+	DIVORCED: 'Разведен(а)',
+	SINGLE: 'Холост (не замужем)',
+	WIDOW: 'Вдовец (вдова)',
+	CIVIL: 'Гражданский брак',
+};
+
+export const EducationTypes: Record<EducationKeys, string> = {
+	INCOMPLETE_SECONDARY: 'Незаконченное среднее',
+	INCOMPLETE_HIGHER: 'Неполное высшее',
+	ACADEMIC_DEGREE: 'Ученая степень',
+	MEDIUM: 'Среднее (включая специальное)',
+	HIGHER: 'Высшее',
+};
 
 export const WorkStatuses: Record<WorkStatusKeys, string> = {
 	SELF_EMPLOYED: 'Самозанятый',
@@ -46,4 +71,28 @@ export const ProvisionTypes: Record<ProvisionKeys, string> = {
 	GUARANTEE: 'Поручительство',
 	BILL: 'Вексель',
 	NO_PROVISION: 'Без обеспечения',
+};
+
+export const sizeMap = {
+	xsmall: {
+		r: 6,
+		strokeWidth: 3,
+	},
+	small: {
+		r: 10,
+		strokeWidth: 4,
+	},
+	medium: {
+		r: 17,
+		strokeWidth: 6,
+	},
+	large: {
+		r: 32,
+		strokeWidth: 8,
+	},
+};
+
+export const colorMap = {
+	blue: majorBlue,
+	white: mainColor,
 };

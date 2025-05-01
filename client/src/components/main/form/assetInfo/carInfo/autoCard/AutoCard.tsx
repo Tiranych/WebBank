@@ -20,8 +20,8 @@ export const AutoCard = ({
 	handleDeleteClick: (index: number) => void;
 }) => {
 	const { control } = useFormContext();
-	const brandWatcher = useWatch({ control, name: `assets_car.${index}.brand` });
-	let modelWatcher = useWatch({ control, name: `assets_car.${index}.model` });
+	const brandWatcher = useWatch({ control, name: `assetsCar.${index}.brand` });
+	let modelWatcher = useWatch({ control, name: `assetsCar.${index}.model` });
 	const [isModelActive, setIsModelActive] = useState(false);
 
 	const selectedCar = useMemo(() => {
@@ -42,7 +42,7 @@ export const AutoCard = ({
 				<Inner>
 					<Controller
 						control={control}
-						name={`assets_car.${index}.brand`}
+						name={`assetsCar.${index}.brand`}
 						rules={{
 							required: 'Обязательное поле',
 							validate: (value) => {
@@ -84,7 +84,7 @@ export const AutoCard = ({
 				<Inner>
 					<Controller
 						control={control}
-						name={`assets_car.${index}.model`}
+						name={`assetsCar.${index}.model`}
 						rules={{
 							required: 'Обязательное поле',
 							validate: (value) => {
@@ -136,7 +136,7 @@ export const AutoCard = ({
 				<Inner>
 					<Controller
 						control={control}
-						name={`assets_car.${index}.year`}
+						name={`assetsCar.${index}.year`}
 						rules={{
 							required: 'Обязательное поле',
 							validate: (value) => {
@@ -176,7 +176,7 @@ export const AutoCard = ({
 				<Inner>
 					<Controller
 						control={control}
-						name={`assets_car.${index}.price`}
+						name={`assetsCar.${index}.price`}
 						rules={{
 							required: 'Обязательное поле',
 						}}

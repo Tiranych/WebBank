@@ -18,7 +18,7 @@ export const DebtCard = ({ step }: { step: number }) => {
 	useEffect(() => {
 		fields.length < 1 &&
 			append({
-				bank_name: '',
+				bankName: '',
 				summary: '',
 				period: '',
 				percent: '',
@@ -28,7 +28,7 @@ export const DebtCard = ({ step }: { step: number }) => {
 	}, []);
 
 	const handleAddClick = () => {
-		append({ bank_name: '', summary: '', period: '', percent: '', remain: '', provision: '' });
+		append({ bankName: '', summary: '', period: '', percent: '', remain: '', provision: '' });
 	};
 
 	const handleDeleteClick = (index: number) => {
@@ -45,7 +45,7 @@ export const DebtCard = ({ step }: { step: number }) => {
 						<Inner>
 							<Controller
 								control={control}
-								name={`debts.${index}.bank_name`}
+								name={`debts.${index}.bankName`}
 								rules={{
 									required: 'Обязательное поле',
 								}}
@@ -251,11 +251,13 @@ export const DebtCard = ({ step }: { step: number }) => {
 													}}
 												/>
 												<datalist id='provisionList'>
-													<option value={ProvisionTypes.ESTATE} />
-													<option value={ProvisionTypes.TRANSPORT} />
-													<option value={ProvisionTypes.GUARANTEE} />
-													<option value={ProvisionTypes.BILL} />
-													<option value={ProvisionTypes.NO_PROVISION} />
+													{Object.values(ProvisionTypes).map(
+														(item, index) => {
+															return (
+																<option key={index} value={item} />
+															);
+														}
+													)}
 												</datalist>
 												<ErrorText $enabled={!!error}>
 													{error?.message}

@@ -12,7 +12,7 @@ export const CarInfo = ({ step }: { step: number }) => {
 
 	const { fields, append, remove } = useFieldArray({
 		control,
-		name: 'assets_car',
+		name: 'assetsCar',
 	});
 
 	useEffect(() => {

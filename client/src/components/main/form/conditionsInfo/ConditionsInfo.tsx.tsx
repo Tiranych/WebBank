@@ -41,9 +41,9 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 											}}
 										/>
 										<datalist id='purposeList'>
-											<option value={PurposeTypes.CONSUMER_PURPOSE} />
-											<option value={PurposeTypes.CAR_PURCHASE} />
-											<option value={PurposeTypes.ESTATE_PURCHASE} />
+											{Object.values(PurposeTypes).map((item, index) => {
+												return <option key={index} value={item} />;
+											})}
 										</datalist>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
 									</div>
@@ -55,7 +55,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='credit_summary'
+						name='creditSummary'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -87,7 +87,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='repayment_schedule'
+						name='repaymentSchedule'
 						rules={{
 							validate: (value) =>
 								Object.values(ScheduleTypes).includes(value) ||
@@ -110,8 +110,9 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 											}}
 										/>
 										<datalist id='scheduleType'>
-											<option value={ScheduleTypes.ANNUITIES} />
-											<option value={ScheduleTypes.DIFFERENTIATED} />
+											{Object.values(ScheduleTypes).map((item, index) => {
+												return <option key={index} value={item} />;
+											})}
 										</datalist>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
 									</div>
@@ -123,7 +124,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='credit_period'
+						name='creditPeriod'
 						rules={{
 							required: 'Обязательное поле',
 						}}

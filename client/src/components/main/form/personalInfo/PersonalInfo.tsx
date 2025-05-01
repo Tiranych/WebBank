@@ -1,10 +1,14 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
-import { ErrorText, Inner, Input, Row, Subtitle } from '../Form.styled';
+import { EducationTypes, MaritalStatuses } from '@utils/constants';
+
+import { ErrorText, Inner, Input, RadioBox, Row, Subtitle } from '../Form.styled';
 
 export const PersonalInfo = ({ step }: { step: number }) => {
 	const { control } = useFormContext();
+
+	const phoneNumber = useWatch({ control, name: 'phoneNumber' });
 
 	const validateDate = (dateString: string) => {
 		if (!/^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19\d{2}|20\d{2})$/.test(dateString)) {
@@ -56,7 +60,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='firstName'
+						name='lastName'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -67,7 +71,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='firstName'
+											id='lastName'
 											placeholder='Фамилия'
 											onChange={(e) => {
 												const cyrillicOnly = e.target.value
@@ -92,7 +96,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='lastName'
+						name='firstName'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -103,7 +107,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='lastName'
+											id='firstName'
 											placeholder='Имя'
 											onChange={(e) => {
 												const cyrillicOnly = e.target.value
@@ -164,7 +168,124 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='birthDate'
+						name='gender'
+						rules={{
+							validate: (value) => {
+								return value !== undefined;
+							},
+						}}
+						render={({ field }) => (
+							<>
+								<RadioBox>
+									<input
+										type='radio'
+										checked={field.value === 'Мужской'}
+										onChange={() => {
+											field.onChange('Мужской');
+										}}
+									/>
+									<label>Мужской</label>
+								</RadioBox>
+								<RadioBox>
+									<input
+										type='radio'
+										checked={field.value === 'Женский'}
+										onChange={() => {
+											field.onChange('Женский');
+										}}
+									/>
+									<label>Женский</label>
+								</RadioBox>
+							</>
+						)}
+					/>
+				</Inner>
+			</Row>
+			<Row>
+				<Inner>
+					<Controller
+						control={control}
+						name='address'
+						rules={{
+							required: 'Обязательное поле',
+						}}
+						render={({ field: controllerField, fieldState: { error } }) => {
+							return (
+								<>
+									<div>
+										<Input
+											{...controllerField}
+											type='text'
+											id='address'
+											placeholder='Адрес регистрации'
+											$longInput
+											onChange={(e) => {
+												const cyrillicOnly = e.target.value
+													.replace(/[^А-ЯЁа-яё0-9\s\-,./]/g, '')
+													.replace(/\s{2,}/g, ' ')
+													.replace(/,{2,}/g, ',');
+
+												controllerField.onChange(cyrillicOnly);
+											}}
+										/>
+										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
+									</div>
+								</>
+							);
+						}}
+					/>
+				</Inner>
+				<Inner>
+					<Controller
+						control={control}
+						name='phoneNumber'
+						rules={{
+							required: 'Обязательное поле',
+							pattern: {
+								value: /^[\d+]{12}$/,
+								message: 'Неверный формат телефона',
+							},
+						}}
+						render={({ field, fieldState: { error } }) => {
+							return (
+								<>
+									<div>
+										<Input
+											{...field}
+											type='text'
+											id='phoneNumber'
+											placeholder='Номер телефона'
+											onChange={(e) => {
+												let phone = '+7';
+												let digitsOnly;
+												if (!(e.target.value.length < 2)) {
+													digitsOnly = e.target.value
+														.slice(2)
+														.replace(/[^\d+]/g, '')
+														.slice(0, 10);
+												} else {
+													digitsOnly = e.target.value.replace(
+														/[^\d]/g,
+														''
+													);
+												}
+												phone += digitsOnly;
+												field.onChange(phone);
+											}}
+										/>
+										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
+									</div>
+								</>
+							);
+						}}
+					/>
+				</Inner>
+			</Row>
+			<Row>
+				<Inner>
+					<Controller
+						control={control}
+						name='birthdate'
 						rules={{
 							required: 'Обязательное поле',
 							validate: validateDate,
@@ -176,7 +297,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='birthDate'
+											id='birthdate'
 											placeholder='Дата рождения'
 											onChange={(e) => {
 												let value = e.target.value.replace(/[^0-9]/g, '');
@@ -197,7 +318,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='city'
+						name='birthplace'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -208,18 +329,13 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='city'
-											placeholder='Город'
+											id='birthplace'
+											placeholder='Место рождения'
 											onChange={(e) => {
-												const cyrillicOnly = e.target.value
-													.replace(/[^А-ЯЁа-яё]/g, '')
-													.split(' ')
-													.map(
-														(word) =>
-															word.charAt(0).toUpperCase() +
-															word.slice(1).toLowerCase()
-													)
-													.join(' ');
+												const cyrillicOnly = e.target.value.replace(
+													/[^А-ЯЁа-яё,. ]/g,
+													''
+												);
 												field.onChange(cyrillicOnly);
 											}}
 										/>
@@ -257,6 +373,72 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 												field.onChange(digitsOnly);
 											}}
 										/>
+										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
+									</div>
+								</>
+							);
+						}}
+					/>
+				</Inner>
+			</Row>
+			<Row>
+				<Inner>
+					<Controller
+						control={control}
+						name='maritalStatus'
+						rules={{
+							required: 'Выберите значение из списка',
+							validate: (value) =>
+								Object.values(MaritalStatuses).includes(value) ||
+								'Выберите значение из списка',
+						}}
+						render={({ field, fieldState: { error } }) => {
+							return (
+								<>
+									<div>
+										<Input
+											{...field}
+											list='maritalList'
+											id='maritalStatus'
+											placeholder='Семейное положение'
+										/>
+										<datalist id='maritalList'>
+											{Object.values(MaritalStatuses).map((item, index) => {
+												return <option key={index} value={item} />;
+											})}
+										</datalist>
+										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
+									</div>
+								</>
+							);
+						}}
+					/>
+				</Inner>
+				<Inner>
+					<Controller
+						control={control}
+						name='education'
+						rules={{
+							required: 'Выберите значение из списка',
+							validate: (value) =>
+								Object.values(EducationTypes).includes(value) ||
+								'Выберите значение из списка',
+						}}
+						render={({ field, fieldState: { error } }) => {
+							return (
+								<>
+									<div>
+										<Input
+											{...field}
+											list='educationList'
+											id='education'
+											placeholder='Образование'
+										/>
+										<datalist id='educationList'>
+											{Object.values(EducationTypes).map((item, index) => {
+												return <option key={index} value={item} />;
+											})}
+										</datalist>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
 									</div>
 								</>

@@ -41,13 +41,9 @@ export const EmploymentInfo = ({ step }: { step: number }) => {
 											}}
 										/>
 										<datalist id='statusList'>
-											<option value={WorkStatuses['SELF_EMPLOYED']} />
-											<option value={WorkStatuses['WORK_FOR_HIRE']} />
-											<option value={WorkStatuses['IE']} />
-											<option value={WorkStatuses['PRIVATE_PRACTICE']} />
-											<option value={WorkStatuses['MILITARY']} />
-											<option value={WorkStatuses['RETIRED']} />
-											<option value={WorkStatuses['UN_EMPLOYED']} />
+											{Object.values(WorkStatuses).map((item, index) => {
+												return <option key={index} value={item} />;
+											})}
 										</datalist>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
 									</div>

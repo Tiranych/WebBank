@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { headerBackgroundColor } from '@utils/variables';
 
 export const Wrapper = styled.header`
-	padding: 40px 0;
+	padding: 30px 0;
 	background-color: ${headerBackgroundColor};
 `;
 

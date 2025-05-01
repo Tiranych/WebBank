@@ -6,7 +6,7 @@ import { TClients } from 'types';
 import { Subtitle, Wrapper } from './AgeDiagram.styled';
 
 type AgeDiagramProps = {
-	clients: TClients;
+	clients: any;
 };
 
 const ageDiagramColors = [
@@ -23,7 +23,7 @@ export const AgeDiagram = ({ clients }: AgeDiagramProps) => {
 	let res = [0, 0, 0, 0, 0];
 
 	const groupByAge = () => {
-		clients.forEach((client) => {
+		clients.forEach((client: any) => {
 			const age = client.age;
 
 			if (age >= 18 && age < 25) {

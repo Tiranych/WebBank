@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 
 import { mainBackgroundColor, mainColor } from '@utils/variables';
 
@@ -19,4 +19,22 @@ export const Wrapper = styled.div`
 	flex-direction: column;
 	width: 100%;
 	height: 100vh;
+`;
+
+export const Overlay = styled.div<{ $isShowOverlay: boolean }>`
+	width: 100%;
+	height: 100%;
+	${({ $isShowOverlay }) =>
+		$isShowOverlay &&
+		css`
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+			z-index: 10;
+			display: block;
+			overflow: auto;
+		`}
 `;
