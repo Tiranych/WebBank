@@ -1,12 +1,15 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { WorkStatuses } from '@utils/constants';
 
 import { ErrorText, Inner, Input, Row, Subtitle } from '../Form.styled';
+import { Wrapper } from './Employment.styled';
 
 export const EmploymentInfo = ({ step }: { step: number }) => {
 	const { control } = useFormContext();
+
+	const workStatus = useWatch({ control, name: 'status' });
 
 	return (
 		<>
@@ -70,8 +73,8 @@ export const EmploymentInfo = ({ step }: { step: number }) => {
 											placeholder='Ежемесячный доход, руб.'
 											onChange={(e) => {
 												const onlyDigits = e.target.value
-													.replace(/[^0-9]|\b0+\d+/g, '')
-													.replace(/\b0+(?=\b)/g, '0');
+													.replace(/\D/g, '')
+													.replace(/^0+(\d)/, '$1');
 												field.onChange(onlyDigits);
 											}}
 										/>
@@ -97,12 +100,11 @@ export const EmploymentInfo = ({ step }: { step: number }) => {
 											{...field}
 											type='text'
 											id='seniority'
-											placeholder='Стаж работы, мес.'
-											$shortInput
+											placeholder='Общий стаж работы, мес.'
 											onChange={(e) => {
 												const onlyDigits = e.target.value
 													.replace(/\D/g, '')
-													.replace(/^0+/, '');
+													.replace(/^0+(\d)/, '$1');
 												field.onChange(onlyDigits);
 											}}
 										/>
@@ -119,16 +121,19 @@ export const EmploymentInfo = ({ step }: { step: number }) => {
 					<Controller
 						control={control}
 						name='workplace'
-						defaultValue=''
+						disabled={
+							workStatus === WorkStatuses.UN_EMPLOYED || workStatus === undefined
+						}
+						rules={{ required: 'Обязательное поле' }}
 						render={({ field, fieldState: { error } }) => {
 							return (
 								<>
-									<div>
+									<Wrapper>
 										<Input
 											{...field}
 											type='text'
 											id='workplace'
-											placeholder='Место работы (необязательно)'
+											placeholder='Текущее место работы'
 											$longInput
 											onChange={(e) => {
 												const cyrillicAndDigitsOnly =
@@ -137,7 +142,40 @@ export const EmploymentInfo = ({ step }: { step: number }) => {
 											}}
 										/>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
-									</div>
+									</Wrapper>
+								</>
+							);
+						}}
+					/>
+				</Inner>
+			</Row>
+			<Row>
+				<Inner>
+					<Controller
+						control={control}
+						name='workaddress'
+						disabled={
+							workStatus === WorkStatuses.UN_EMPLOYED || workStatus === undefined
+						}
+						rules={{ required: 'Обязательное поле' }}
+						render={({ field, fieldState: { error } }) => {
+							return (
+								<>
+									<Wrapper>
+										<Input
+											{...field}
+											type='text'
+											id='workaddress'
+											placeholder='Адрес организации'
+											$longInput
+											onChange={(e) => {
+												const cyrillicAndDigitsOnly =
+													e.target.value.replace(/[^А-ЯЁа-яё 0-9]/g, '');
+												field.onChange(cyrillicAndDigitsOnly);
+											}}
+										/>
+										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
+									</Wrapper>
 								</>
 							);
 						}}

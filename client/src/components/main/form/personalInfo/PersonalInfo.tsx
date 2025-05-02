@@ -60,7 +60,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='lastName'
+						name='lastname'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -71,7 +71,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='lastName'
+											id='lastname'
 											placeholder='Фамилия'
 											onChange={(e) => {
 												const cyrillicOnly = e.target.value
@@ -96,7 +96,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='firstName'
+						name='firstname'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -107,7 +107,7 @@ export const PersonalInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='firstName'
+											id='firstname'
 											placeholder='Имя'
 											onChange={(e) => {
 												const cyrillicOnly = e.target.value

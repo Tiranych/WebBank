@@ -28,3 +28,12 @@ export const Img = styled.img`
 	max-width: 32px;
 	max-height: 32px;
 `;
+
+export const RadioInner = styled.div`
+	display: flex;
+	gap: 0 15px;
+`;
+
+export const Question = styled.h4`
+	max-width: 300px;
+`;

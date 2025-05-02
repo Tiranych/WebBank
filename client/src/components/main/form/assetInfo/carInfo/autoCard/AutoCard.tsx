@@ -140,7 +140,7 @@ export const AutoCard = ({
 						rules={{
 							required: 'Обязательное поле',
 							validate: (value) => {
-								const yearFrom = selectedModel?.['year-from'] || 1950;
+								const yearFrom = selectedModel?.['year-from'] || 1900;
 								const yearTo =
 									selectedModel?.['year-to'] || new Date().getFullYear();
 								if (value < yearFrom || value > yearTo) {
@@ -155,7 +155,7 @@ export const AutoCard = ({
 									<div>
 										<Input
 											{...controllerField}
-											type='text'
+											type='number'
 											id={`carYear-${id}`}
 											placeholder='Год выпуска'
 											$shortInput
@@ -163,7 +163,7 @@ export const AutoCard = ({
 												let value = e.target.value.replace(/[^0-9]/g, '');
 												if (value.length > 4)
 													value = `${value.slice(0, 4)}`;
-												controllerField.onChange(value);
+												controllerField.onChange(Number(value));
 											}}
 										/>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
@@ -186,7 +186,7 @@ export const AutoCard = ({
 									<div>
 										<Input
 											{...controllerField}
-											type='text'
+											type='number'
 											id={`carPrice-${id}`}
 											placeholder='Текущая стоимость, руб.'
 											onChange={(e) => {
@@ -194,7 +194,7 @@ export const AutoCard = ({
 													/\D/g,
 													''
 												);
-												controllerField.onChange(onlyDigits);
+												controllerField.onChange(Number(onlyDigits));
 											}}
 										/>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>

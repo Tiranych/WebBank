@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../config/db';
+import { TClient } from 'types';
+import { camelizeData } from '../utils/decamelize';
 
 export async function getCreditHistories(req: Request, res: Response) {
 	try {
@@ -10,17 +12,32 @@ export async function getCreditHistories(req: Request, res: Response) {
 	}
 }
 
-export async function createCreditHistory(req: Request, res: Response) {
-	const { rating, debtLoad } = req.body;
-	try {
-		const result = await db.query(
-			'INSERT INTO credit_history (rating, debt_load) VALUES ($1, $2) RETURNING *',
-			[rating, debtLoad]
+export async function createCreditHistory(data: TClient) {
+	const result: number[] = [];
+	await db.query('BEGIN');
+
+	for (const debt of data.debts) {
+		const res = await db.query(
+			`INSERT INTO credit_history (bank_name, credit_percent, credit_period, 
+					credit_provision, credit_remain, credit_summary, has_current_overdue_debt, has_repaid_overdue_debt, has_restructuring)
+					VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+			[
+				debt.bankName,
+				debt.percent,
+				debt.period,
+				debt.provision,
+				debt.remain,
+				debt.summary,
+				debt.hasCurrentOverdueDebt,
+				debt.hasRepaidOverdueDebt,
+				debt.hasRestructuring,
+			]
 		);
-		res.status(201).json(result.rows[0]);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message });
+		result.push(camelizeData(res.rows[0]).idCreditHistory);
 	}
+
+	await db.query('COMMIT');
+	return result;
 }
 
 /* export async function updateCreditHistory(req: Request, res: Response) {

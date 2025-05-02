@@ -29,7 +29,7 @@ router.post('/api/contracts', createContract);
 router.delete('/api/contracts/:id', deleteContract);
 
 router.get('/api/clients', getClients);
-router.post('/api/clients', createClient);
+//router.post('/api/clients', createClient);
 //router.put("/api/clients/:id", updateClient);
 router.delete('/api/clients/:id', deleteClient);
 

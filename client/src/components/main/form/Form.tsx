@@ -33,7 +33,6 @@ export const Form = ({
 			{isLoading && <Spin isLoading={isLoading} size={'medium'} />}
 			<Wrapper
 				onSubmit={methods.handleSubmit(async (data) => {
-					/* console.log(data); */
 					try {
 						setIsLoading(true);
 						const response = await sendQuestionnaire<TQuestionnaireResponse>(data);
@@ -48,10 +47,10 @@ export const Form = ({
 				})}
 			>
 				{step === 1 && <PersonalInfo step={step} />}
-				{/* {step === 2 && <EmploymentInfo step={step} />}
+				{step === 2 && <EmploymentInfo step={step} />}
 				{step === 3 && <AssetInfo step={step} />}
 				{step === 4 && <DebtInfo step={step} />}
-				{step === 5 && <ConditionsInfo step={step} />} */}
+				{step === 5 && <ConditionsInfo step={step} />}
 				<Box>
 					<Button
 						type='button'

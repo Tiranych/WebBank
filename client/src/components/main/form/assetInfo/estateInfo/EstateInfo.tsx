@@ -94,7 +94,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 											<div>
 												<Input
 													{...controllerField}
-													type='text'
+													type='number'
 													id={`estateSquare-${index}`}
 													placeholder='Площадь, м²'
 													$shortInput
@@ -102,7 +102,9 @@ export const EstateInfo = ({ step }: { step: number }) => {
 														const onlyDigits = e.target.value
 															.replace(/\D/g, '')
 															.replace(/^0+/, '');
-														controllerField.onChange(onlyDigits);
+														controllerField.onChange(
+															Number(onlyDigits)
+														);
 													}}
 												/>
 												<ErrorText $enabled={!!error}>
@@ -173,7 +175,7 @@ export const EstateInfo = ({ step }: { step: number }) => {
 											<div>
 												<Input
 													{...controllerField}
-													type='text'
+													type='number'
 													id={`estatePrice-${index}`}
 													placeholder='Текущая стоимость, руб.'
 													onChange={(e) => {
@@ -181,7 +183,9 @@ export const EstateInfo = ({ step }: { step: number }) => {
 															/\D/g,
 															''
 														);
-														controllerField.onChange(onlyDigits);
+														controllerField.onChange(
+															Number(onlyDigits)
+														);
 													}}
 												/>
 												<ErrorText $enabled={!!error}>

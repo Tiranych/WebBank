@@ -5,7 +5,7 @@ import { ProvisionTypes } from '@utils/constants';
 
 import { ErrorText, Input, Row } from '../../Form.styled';
 import { Inner } from '../DebtInfo.styled';
-import { Box, ButtonBox, Img, Subtitle, Wrapper } from './DebtCard.styled';
+import { Box, ButtonBox, Img, Question, RadioInner, Subtitle, Wrapper } from './DebtCard.styled';
 
 export const DebtCard = ({ step }: { step: number }) => {
 	const { control } = useFormContext();
@@ -24,11 +24,24 @@ export const DebtCard = ({ step }: { step: number }) => {
 				percent: '',
 				remain: '',
 				provision: '',
+				hasCurrentOverdueDebt: undefined,
+				hasRepaidOverdueDebt: undefined,
+				hasRestructuring: undefined,
 			});
 	}, []);
 
 	const handleAddClick = () => {
-		append({ bankName: '', summary: '', period: '', percent: '', remain: '', provision: '' });
+		append({
+			bankName: '',
+			summary: '',
+			period: '',
+			percent: '',
+			remain: '',
+			provision: '',
+			hasCurrentOverdueDebt: undefined,
+			hasRepaidOverdueDebt: undefined,
+			hasRestructuring: undefined,
+		});
 	};
 
 	const handleDeleteClick = (index: number) => {
@@ -173,10 +186,9 @@ export const DebtCard = ({ step }: { step: number }) => {
 													placeholder='Ставка, %'
 													$shortInput
 													onChange={(e) => {
-														const onlyDigits = e.target.value.replace(
-															/[^0-9,]/g,
-															''
-														);
+														const onlyDigits = e.target.value
+															.replace(/[^0-9,]/g, '')
+															.replace(/^0+(\d)/, '$1');
 														controllerField.onChange(onlyDigits);
 													}}
 												/>
@@ -246,7 +258,6 @@ export const DebtCard = ({ step }: { step: number }) => {
 															/[^А-ЯЁа-яё ]/g,
 															''
 														);
-
 														controllerField.onChange(cyrillicOnly);
 													}}
 												/>
@@ -267,6 +278,122 @@ export const DebtCard = ({ step }: { step: number }) => {
 									);
 								}}
 							/>
+						</Inner>
+					</Row>
+					<Row>
+						<Inner>
+							<div>
+								<Question>Текущая просроченная задолженность?</Question>
+								<Controller
+									control={control}
+									name={`debts.${index}.hasCurrentOverdueDebt`}
+									rules={{
+										validate: (value) => {
+											return value !== undefined;
+										},
+									}}
+									render={({ field }) => (
+										<RadioInner>
+											<div>
+												<input
+													type='radio'
+													checked={field.value === true}
+													onChange={() => {
+														field.onChange(true);
+													}}
+												/>
+												<label>Да</label>
+											</div>
+											<div>
+												<input
+													type='radio'
+													checked={field.value === false}
+													onChange={() => {
+														field.onChange(false);
+													}}
+												/>
+												<label>Нет</label>
+											</div>
+										</RadioInner>
+									)}
+								/>
+							</div>
+						</Inner>
+						<Inner>
+							<div>
+								<Question>Погашенная просроченная задолженность?</Question>
+								<Controller
+									control={control}
+									name={`debts.${index}.hasRepaidOverdueDebt`}
+									rules={{
+										validate: (value) => {
+											return value !== undefined;
+										},
+									}}
+									render={({ field }) => (
+										<RadioInner>
+											<div>
+												<input
+													type='radio'
+													checked={field.value === true}
+													onChange={() => {
+														field.onChange(true);
+													}}
+												/>
+												<label>Да</label>
+											</div>
+											<div>
+												<input
+													type='radio'
+													checked={field.value === false}
+													onChange={() => {
+														field.onChange(false);
+													}}
+												/>
+												<label>Нет</label>
+											</div>
+										</RadioInner>
+									)}
+								/>
+							</div>
+						</Inner>
+						<Inner>
+							<div>
+								<Question>Наличие реструктуризаций?</Question>
+								<Controller
+									control={control}
+									name={`debts.${index}.hasRestructuring`}
+									rules={{
+										validate: (value) => {
+											return value !== undefined;
+										},
+									}}
+									render={({ field }) => (
+										<RadioInner>
+											<div>
+												<input
+													type='radio'
+													checked={field.value === true}
+													onChange={() => {
+														field.onChange(true);
+													}}
+												/>
+												<label>Да</label>
+											</div>
+											<div>
+												<input
+													type='radio'
+													checked={field.value === false}
+													onChange={() => {
+														field.onChange(false);
+													}}
+												/>
+												<label>Нет</label>
+											</div>
+										</RadioInner>
+									)}
+								/>
+							</div>
 						</Inner>
 					</Row>
 				</Wrapper>

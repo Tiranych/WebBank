@@ -69,7 +69,10 @@ export const RadioBox = styled.div`
 	gap: 0 10px;
 `;
 
-export const Input = styled.input<{ $shortInput?: boolean; $longInput?: boolean }>`
+export const Input = styled.input<{
+	$shortInput?: boolean;
+	$longInput?: boolean;
+}>`
 	font-size: 20px;
 	width: 285px;
 	padding: 5px 10px;

@@ -1,8 +1,8 @@
 type TAssetCar = {
 	brand: string;
 	model: string;
-	price: string;
-	year: string;
+	price: number;
+	year: number;
 };
 
 type TAssetEstate = {
@@ -19,32 +19,40 @@ type TDebt = {
 	provision: string;
 	remain: string;
 	summary: string;
+	hasCurrentOverdueDebt: boolean;
+	hasRepaidOverdueDebt: boolean;
+	hasRestructuring: boolean;
+};
+
+type TCreditConditions = {
+	period: number;
+	purpose: string;
+	repaymentSchedule: string;
+	summary: number;
 };
 
 export type TClient = {
+	address: string;
 	assetsCar: TAssetCar[];
 	assetsEstate: TAssetEstate[];
 	birthdate: string;
-	address: string;
+	birthplace: string;
 	education: string;
 	phoneNumber: string;
 	maritalStatus: string;
 	gender: string;
-	birthplace: string;
-	creditPeriod: string;
-	creditSummary: string;
+	creditConditions: TCreditConditions;
 	debts: TDebt[];
-	firstName: string;
+	firstname: string;
 	hasCars: boolean;
 	hasDebts: boolean;
 	hasEstate: boolean;
 	income: number;
 	inn: string;
-	lastName: string;
+	lastname: string;
 	patronymic: string;
-	purpose: string;
-	repaymentSchedule: string;
 	seniority: string;
 	status: string;
 	workplace: string;
+	workaddress: string;
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { PurposeTypes, ScheduleTypes, WorkStatuses } from '@utils/constants';
+import { PurposeTypes, ScheduleTypes } from '@utils/constants';
 
 import { ErrorText, Inner, Input, Row, Subtitle } from '../Form.styled';
 
@@ -15,7 +15,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='purpose'
+						name='creditConditions.purpose'
 						rules={{
 							validate: (value) =>
 								Object.values(PurposeTypes).includes(value) ||
@@ -28,7 +28,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											list='purposeList'
-											id='purpose'
+											id='creditConditionsPurpose'
 											placeholder='Цель кредитования'
 											$longInput
 											onChange={(e) => {
@@ -55,7 +55,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='creditSummary'
+						name='creditConditions.summary'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -65,14 +65,14 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 									<div>
 										<Input
 											{...field}
-											type='text'
-											id='creditSummary'
+											type='number'
+											id='creditConditionsSummary'
 											placeholder='Сумма кредита, руб.'
 											onChange={(e) => {
 												const onlyDigits = e.target.value
 													.replace(/\D/g, '')
 													.replace(/^0+/, '');
-												field.onChange(onlyDigits);
+												field.onChange(Number(onlyDigits));
 											}}
 										/>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
@@ -87,7 +87,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='repaymentSchedule'
+						name='creditConditions.repaymentSchedule'
 						rules={{
 							validate: (value) =>
 								Object.values(ScheduleTypes).includes(value) ||
@@ -100,7 +100,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 										<Input
 											{...field}
 											type='text'
-											id='repaymentSchedule'
+											id='creditConditionsRepaymentSchedule'
 											placeholder='График погашения'
 											list='scheduleType'
 											onChange={(e) => {
@@ -124,7 +124,7 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 				<Inner>
 					<Controller
 						control={control}
-						name='creditPeriod'
+						name='creditConditions.period'
 						rules={{
 							required: 'Обязательное поле',
 						}}
@@ -134,14 +134,14 @@ export const ConditionsInfo = ({ step }: { step: number }) => {
 									<div>
 										<Input
 											{...field}
-											type='text'
-											id='creditPeriod'
+											type='number'
+											id='creditConditionsCreditPeriod'
 											placeholder='Срок кредитования, мес.'
 											onChange={(e) => {
 												const onlyDigits = e.target.value
 													.replace(/\D/g, '')
 													.replace(/^0+/, '');
-												field.onChange(onlyDigits);
+												field.onChange(Number(onlyDigits));
 											}}
 										/>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>

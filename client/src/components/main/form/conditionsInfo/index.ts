@@ -1,1 +1,1 @@
-export { ConditionsInfo } from './ConditionsInfo.tsx';
+export { ConditionsInfo } from './ConditionsInfo';
