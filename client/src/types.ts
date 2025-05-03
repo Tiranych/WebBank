@@ -15,7 +15,8 @@ type TAssetEstate = {
 type TDebt = {
 	bankName: string;
 	percent: string;
-	period: string;
+	startDate: string;
+	endDate: string;
 	provision: string;
 	remain: string;
 	summary: string;
@@ -57,9 +58,15 @@ export type TClient = {
 	workaddress: string;
 };
 
+export type TScoringResponse = {
+	decision: 'Одобрено' | 'Отказ (высокий риск)';
+	risk_score: number;
+};
+
 export type TQuestionnaireResponse = {
 	success: boolean;
 	idClient: number;
+	scoringRes: TScoringResponse;
 };
 
 export type TCredit = {

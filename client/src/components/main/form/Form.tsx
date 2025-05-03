@@ -36,6 +36,7 @@ export const Form = ({
 					try {
 						setIsLoading(true);
 						const response = await sendQuestionnaire<TQuestionnaireResponse>(data);
+						console.log(response);
 						if (response.success) {
 							setShowModal(true);
 						}

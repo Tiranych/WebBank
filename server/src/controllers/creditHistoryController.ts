@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import db from '../config/db';
 import { TClient } from 'types';
 import { camelizeData } from '../utils/decamelize';
+import { getMonthsBetweenDates } from '../utils/getMonthsBetweenDates';
 
 export async function getCreditHistories(req: Request, res: Response) {
 	try {
@@ -17,6 +18,20 @@ export async function createCreditHistory(data: TClient) {
 	await db.query('BEGIN');
 
 	for (const debt of data.debts) {
+		const startDate = new Date(
+			Number(debt.startDate.split('.')[2]),
+			Number(debt.startDate.split('.')[1]) - 1,
+			Number(debt.startDate.split('.')[0])
+		);
+
+		const endDate = new Date(
+			Number(debt.endDate.split('.')[2]),
+			Number(debt.endDate.split('.')[1]) - 1,
+			Number(debt.endDate.split('.')[0])
+		);
+
+		let periodTotal = getMonthsBetweenDates(startDate, endDate);
+
 		const res = await db.query(
 			`INSERT INTO credit_history (bank_name, credit_percent, credit_period, 
 					credit_provision, credit_remain, credit_summary, has_current_overdue_debt, has_repaid_overdue_debt, has_restructuring)
@@ -24,7 +39,7 @@ export async function createCreditHistory(data: TClient) {
 			[
 				debt.bankName,
 				debt.percent,
-				debt.period,
+				periodTotal,
 				debt.provision,
 				debt.remain,
 				debt.summary,

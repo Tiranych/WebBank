@@ -20,6 +20,8 @@ export const DebtCard = ({ step }: { step: number }) => {
 			append({
 				bankName: '',
 				summary: '',
+				startDate: '',
+				endDate: '',
 				period: '',
 				percent: '',
 				remain: '',
@@ -34,6 +36,8 @@ export const DebtCard = ({ step }: { step: number }) => {
 		append({
 			bankName: '',
 			summary: '',
+			startDate: '',
+			endDate: '',
 			period: '',
 			percent: '',
 			remain: '',
@@ -46,6 +50,39 @@ export const DebtCard = ({ step }: { step: number }) => {
 
 	const handleDeleteClick = (index: number) => {
 		remove(index);
+	};
+
+	const validateDate = (dateString: string) => {
+		if (!/^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/.test(dateString)) {
+			return 'Некорректная дата';
+		}
+
+		const [day, month, year] = dateString.split('.').map(Number);
+		const currentDate = new Date();
+		const currentYear = currentDate.getFullYear();
+		const currentMonth = currentDate.getMonth() + 1;
+		const currentDay = currentDate.getDate();
+
+		if (year > currentYear) {
+			return `Введите год до ${currentYear}`;
+		}
+
+		if (month < 1 || month > 12) {
+			return 'Месяц должен быть от 01 до 12';
+		}
+
+		const daysInMonth = new Date(year, month, 0).getDate();
+		if (day < 1 || day > daysInMonth) {
+			return `В ${month} месяце только ${daysInMonth} дней`;
+		}
+
+		if (year === currentYear) {
+			if (month > currentMonth || (month === currentMonth && day > currentDay)) {
+				return 'Дата не может быть в будущем';
+			}
+		}
+
+		return true;
 	};
 
 	return (
@@ -78,7 +115,6 @@ export const DebtCard = ({ step }: { step: number }) => {
 																/[^А-ЯЁа-яё 0-9]/g,
 																''
 															);
-
 														controllerField.onChange(
 															cyrillicAndDigitsOnly
 														);
@@ -138,9 +174,10 @@ export const DebtCard = ({ step }: { step: number }) => {
 						<Inner>
 							<Controller
 								control={control}
-								name={`debts.${index}.period`}
+								name={`debts.${index}.startDate`}
 								rules={{
 									required: 'Обязательное поле',
+									validate: validateDate,
 								}}
 								render={({ field: controllerField, fieldState: { error } }) => {
 									return (
@@ -149,14 +186,59 @@ export const DebtCard = ({ step }: { step: number }) => {
 												<Input
 													{...controllerField}
 													type='text'
-													id={`debtPeriod-${field.id}`}
-													placeholder='Срок, мес.'
-													$shortInput
+													id={`debtStartDate-${field.id}`}
+													placeholder='Дата получения кредита'
 													onChange={(e) => {
-														const onlyDigits = e.target.value
-															.replace(/\D/g, '')
-															.replace(/^0+/, '');
-														controllerField.onChange(onlyDigits);
+														let value = e.target.value.replace(
+															/[^0-9]/g,
+															''
+														);
+														if (value.length > 2)
+															value = `${value.slice(0, 2)}.${value.slice(2)}`;
+														if (value.length > 5)
+															value = `${value.slice(0, 5)}.${value.slice(5, 9)}`;
+														controllerField.onChange(value);
+													}}
+												/>
+												<ErrorText $enabled={!!error}>
+													{error?.message}
+												</ErrorText>
+											</div>
+										</>
+									);
+								}}
+							/>
+						</Inner>
+						<Inner>
+							<Controller
+								control={control}
+								name={`debts.${index}.endDate`}
+								rules={{
+									required: 'Обязательное поле',
+									pattern: {
+										value: /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/,
+										message: 'Некорректная дата',
+									},
+								}}
+								render={({ field: controllerField, fieldState: { error } }) => {
+									return (
+										<>
+											<div>
+												<Input
+													{...controllerField}
+													type='text'
+													id={`debtEndDate-${field.id}`}
+													placeholder='Дата погашения кредита'
+													onChange={(e) => {
+														let value = e.target.value.replace(
+															/[^0-9]/g,
+															''
+														);
+														if (value.length > 2)
+															value = `${value.slice(0, 2)}.${value.slice(2)}`;
+														if (value.length > 5)
+															value = `${value.slice(0, 5)}.${value.slice(5, 9)}`;
+														controllerField.onChange(value);
 													}}
 												/>
 												<ErrorText $enabled={!!error}>
@@ -201,6 +283,8 @@ export const DebtCard = ({ step }: { step: number }) => {
 								}}
 							/>
 						</Inner>
+					</Row>
+					<Row>
 						<Inner>
 							<Controller
 								control={control}
@@ -232,8 +316,6 @@ export const DebtCard = ({ step }: { step: number }) => {
 								}}
 							/>
 						</Inner>
-					</Row>
-					<Row>
 						<Inner>
 							<Controller
 								control={control}
