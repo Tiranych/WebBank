@@ -5,23 +5,44 @@ import { decamelizeData, camelizeData } from '../utils/decamelize';
 
 export async function getClients(req: Request, res: Response) {
 	try {
+		await db.query('BEGIN');
+
 		const result = await db.query('SELECT * FROM client');
+
+		await db.query('COMMIT');
+
 		res.status(200).json(result.rows);
 	} catch (err: any) {
 		res.status(500).json({ error: err.message });
 	}
 }
 
-export async function createClient(data: TClient, idsCreditHistory: number[]) {
+export async function getClientsById(req: Request, res: Response) {
+	const { id } = req.params;
+
+	try {
+		await db.query('BEGIN');
+
+		const result = await db.query('SELECT * FROM client WHERE id_client = $1', [id]);
+
+		await db.query('COMMIT');
+
+		res.status(200).json(result.rows);
+	} catch (err: any) {
+		res.status(500).json({ error: err.message });
+	}
+}
+
+export async function createClient(data: TClient) {
 	let result = -1;
 
 	await db.query('BEGIN');
+
 	const res = await db.query(
 		`INSERT INTO client (lastname, firstname, patronymic, gender, address, 
-		phone_number, birthdate, birthplace, inn, marital_status, education, 
-		ids_credit_history, assets_car, assets_estate, credit_conditions, has_cars, 
-		has_debts, has_estate, income, seniority, status, workaddress, workplace) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) RETURNING *`,
+		phone_number, birthdate, birthplace, inn, marital_status, education, assets_car, assets_estate, credit_conditions, has_cars, 
+		has_debts, has_estate, income, seniority, workstatus, workaddress, workplace, processed) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, false)`,
 		[
 			data.lastname,
 			data.firstname,
@@ -34,7 +55,6 @@ export async function createClient(data: TClient, idsCreditHistory: number[]) {
 			data.inn,
 			data.maritalStatus,
 			data.education,
-			idsCreditHistory,
 			data.assetsCar,
 			data.assetsEstate,
 			decamelizeData(data.creditConditions),
@@ -43,7 +63,7 @@ export async function createClient(data: TClient, idsCreditHistory: number[]) {
 			data.hasEstate,
 			data.income,
 			data.seniority,
-			data.status,
+			data.workstatus,
 			data.workaddress,
 			data.workplace,
 		]
@@ -55,19 +75,22 @@ export async function createClient(data: TClient, idsCreditHistory: number[]) {
 	return result;
 }
 
-/* export async function updateClient(req: Request, res: Response) {
-  const { id } = req.params;
-  const { idClient, idContract } = req.body;
-  try {
-    const result = await db.query(
-      "UPDATE contract SET id_client = $1, id_contract = $2 WHERE id_credit = $3 RETURNING *",
-      [idClient, idContract, id]
-    );
-    res.status(200).json(result.rows[0]);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-} */
+export async function updateClient(req: Request, res: Response) {
+	const { idClient, status } = req.body;
+	try {
+		await db.query('BEGIN');
+
+		const result = await db.query(
+			'UPDATE client SET processed = true, status = $1  WHERE id_client = $2',
+			[status, idClient]
+		);
+
+		await db.query('COMMIT');
+		res.status(200).json(result.rows[0]);
+	} catch (err: any) {
+		res.status(500).json({ error: err.message });
+	}
+}
 
 export async function deleteClient(req: Request, res: Response) {
 	const { id } = req.params;

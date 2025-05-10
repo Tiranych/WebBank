@@ -1,25 +1,28 @@
-type TAssetCar = {
+export type TAssetCar = {
 	brand: string;
 	model: string;
 	price: number;
 	year: number;
 };
 
-type TAssetEstate = {
+export type TAssetEstate = {
 	address: string;
-	price: string;
-	square: string;
+	price: number;
+	square: number;
 	type: string;
 };
 
-type TDebt = {
+export type TCreditHistory = {
+	idCreditHistory: number;
+	idClient: number;
 	bankName: string;
-	percent: string;
+	creditPercent: number;
+	creditProvision: string;
 	startDate: string;
 	endDate: string;
-	provision: string;
-	remain: string;
-	summary: string;
+	creditPeriod: string;
+	creditRemain: number;
+	creditSummary: number;
 	hasCurrentOverdueDebt: boolean;
 	hasRepaidOverdueDebt: boolean;
 	hasRestructuring: boolean;
@@ -33,6 +36,7 @@ type TCreditConditions = {
 };
 
 export type TClient = {
+	idClient: number;
 	address: string;
 	assetsCar: TAssetCar[];
 	assetsEstate: TAssetEstate[];
@@ -43,54 +47,54 @@ export type TClient = {
 	maritalStatus: string;
 	gender: string;
 	creditConditions: TCreditConditions;
-	debts: TDebt[];
 	firstname: string;
 	hasCars: boolean;
 	hasDebts: boolean;
 	hasEstate: boolean;
 	income: number;
-	inn: string;
+	inn: number;
 	lastname: string;
 	patronymic: string;
-	seniority: string;
-	status: string;
+	seniority: number;
+	workstatus: string;
 	workplace: string;
 	workaddress: string;
+	processed: boolean;
+};
+
+export type DecisionOptions = {
+	ACCEPTED: 'Одобрено';
+	REJECTED: 'Отказ';
+};
+
+export type TScoringRequest = {
+	age: number;
+	income: number;
+	debt_summary: number;
+	debt_remain: number;
+	period_total: number;
+	period_to_pay: number;
+	has_cars: number;
+	car_price: number;
+	has_estate: number;
+	estate_price: number;
+	has_current_overdue_debt: number;
+	has_repaid_overdue_debt: number;
+	has_restructuring: number;
+	loan_purpose_encoded: number;
+	potential_credit_summary: number;
+	potential_credit_period: number;
 };
 
 export type TScoringResponse = {
-	decision: 'Одобрено' | 'Отказ (высокий риск)';
-	risk_score: number;
+	idClient: number;
+	decision: DecisionOptions['ACCEPTED'] | DecisionOptions['REJECTED'];
+	riskScore: number;
 };
 
 export type TQuestionnaireResponse = {
 	success: boolean;
-	idClient: number;
-	scoringRes: TScoringResponse;
-};
-
-export type TCredit = {
-	idCredit: number;
-	idClient: number;
-	idContract: number;
-};
-
-export type TContract = {
-	idContract: number;
-	totalSum: string;
-	paymentPeriod: number;
-	paymentPercent: number;
-	startDate: string;
-	status: string;
-};
-
-export type TCreditHistory = {
-	idCreditHistory: number;
-	rating: number;
-	debtLoad: number;
 };
 
 export type TClients = TClient[];
-export type TCredits = TCredit[];
-export type TContracts = TContract[];
 export type TCreditHistories = TCreditHistory[];

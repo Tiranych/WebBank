@@ -1,63 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router';
-import {
-	TClient,
-	TClients,
-	TContract,
-	TContracts,
-	TCredit,
-	TCreditHistories,
-	TCreditHistory,
-	TCredits,
-} from 'types';
 
-import { Footer } from '@components/footer';
-import { Header } from '@components/header';
-import { Main } from '@components/main';
-
-import { camelizeData } from '@utils/camelize';
+import { ClientCard } from '@components/analyticSide/clientCard';
+import { AnalyticMain } from '@components/analyticSide/main';
+import { Header } from '@components/clientSide/header';
+import { ClientMain } from '@components/clientSide/main';
 
 import { Global, Overlay, Wrapper } from './App.styled';
 
 const App = () => {
-	const [clients, setClients] = useState<TClients>([]);
-	const [contracts, setContracts] = useState<TContracts>([]);
-	const [creditHistories, setCreditHistories] = useState<TCreditHistories>([]);
 	const [showModal, setShowModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setIsLoading(true);
-				const [clientsRes, contractsRes, historiesRes] = await Promise.all([
-					fetch(`http://${process.env.SERVER_HOST_NAME}/api/clients`),
-					fetch(`http://${process.env.SERVER_HOST_NAME}/api/contracts`),
-					fetch(`http://${process.env.SERVER_HOST_NAME}/api/credit-histories`),
-				]);
-
-				const [clients, contracts, creditHistories] = await Promise.all([
-					clientsRes.json(),
-					contractsRes.json(),
-					historiesRes.json(),
-				]);
-
-				const camelizedClients = camelizeData<TClient>(clients);
-				const camelizedContracts = camelizeData<TContract>(contracts);
-				const camelizedCreditHistories = camelizeData<TCreditHistory>(creditHistories);
-
-				setClients(camelizedClients);
-				setContracts(camelizedContracts);
-				setCreditHistories(camelizedCreditHistories);
-			} catch (error) {
-				console.error(error);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchData();
-	}, []);
 
 	return (
 		<>
@@ -69,7 +22,7 @@ const App = () => {
 					<Route
 						index
 						element={
-							<Main
+							<ClientMain
 								showModal={showModal}
 								setShowModal={setShowModal}
 								isLoading={isLoading}
@@ -77,19 +30,15 @@ const App = () => {
 							/>
 						}
 					></Route>
-					{/* <Route
-							path='/analytic'
-							element={
-								<Main
-									clients={clients}
-									credits={credits}
-									contracts={contracts}
-									creditHistories={creditHistories}
-								/>
-							}
-						></Route> */}
+					<Route
+						path='/analytic'
+						element={<AnalyticMain isLoading={isLoading} setIsLoading={setIsLoading} />}
+					></Route>
+					<Route
+						path='/client/:id'
+						element={<ClientCard isLoading={isLoading} setIsLoading={setIsLoading} />}
+					></Route>
 				</Routes>
-				<Footer />
 			</Wrapper>
 		</>
 	);

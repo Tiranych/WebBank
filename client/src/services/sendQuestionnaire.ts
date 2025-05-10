@@ -7,5 +7,7 @@ export const sendQuestionnaire = <T>(data: FieldValues) => {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(data),
-	}).then((res) => res.json()) as T;
+	})
+		.then((res) => res.json())
+		.catch((e: any) => console.log(e.message)) as T;
 };

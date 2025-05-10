@@ -1,25 +1,25 @@
-type TAssetCar = {
+export type TAssetCar = {
 	brand: string;
 	model: string;
 	price: number;
 	year: number;
 };
 
-type TAssetEstate = {
+export type TAssetEstate = {
 	address: string;
-	price: string;
-	square: string;
+	price: number;
+	square: number;
 	type: string;
 };
 
-type TDebt = {
+export type TCreditHistory = {
 	bankName: string;
-	percent: string;
+	percent: number;
 	startDate: string;
 	endDate: string;
 	provision: string;
-	remain: string;
-	summary: string;
+	remain: number;
+	summary: number;
 	hasCurrentOverdueDebt: boolean;
 	hasRepaidOverdueDebt: boolean;
 	hasRestructuring: boolean;
@@ -43,22 +43,48 @@ export type TClient = {
 	maritalStatus: string;
 	gender: string;
 	creditConditions: TCreditConditions;
-	debts: TDebt[];
+	debts: TCreditHistories;
 	firstname: string;
 	hasCars: boolean;
 	hasDebts: boolean;
 	hasEstate: boolean;
 	income: number;
-	inn: string;
+	inn: number;
 	lastname: string;
 	patronymic: string;
-	seniority: string;
-	status: string;
+	seniority: number;
+	workstatus: string;
 	workplace: string;
 	workaddress: string;
 };
 
+export type TScoringRequest = {
+	age: number;
+	income: number;
+	debt_summary: number;
+	debt_remain: number;
+	period_total: number;
+	period_to_pay: number;
+	has_cars: number;
+	car_price: number;
+	has_estate: number;
+	estate_price: number;
+	has_current_overdue_debt: number;
+	has_repaid_overdue_debt: number;
+	has_restructuring: number;
+	loan_purpose_encoded: number;
+	potential_credit_summary: number;
+	potential_credit_period: number;
+};
+
+export type DecisionOptions = {
+	ACCEPTED: 'Одобрено';
+	REJECTED: 'Отказ';
+};
+
 export type TScoringResponse = {
-	decision: 'Одобрено' | 'Отказ (высокий риск)';
+	decision: DecisionOptions['ACCEPTED'] | DecisionOptions['REJECTED'];
 	risk_score: number;
 };
+
+export type TCreditHistories = TCreditHistory[];

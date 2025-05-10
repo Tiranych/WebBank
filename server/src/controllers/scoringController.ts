@@ -1,13 +1,17 @@
-export const makeScoringRequest = (data: any) => {
+import { Request, Response } from 'express';
+
+export const scoringController = async (req: Request, res: Response) => {
 	try {
-		return fetch('http://localhost:8000/predict', {
+		const result = await fetch('http://localhost:8000/predict', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(data),
-		}).then((res) => res.json());
+			body: JSON.stringify(req.body),
+		});
+
+		res.status(200).json(await result.json());
 	} catch (e: any) {
-		return e.messgae;
+		console.log(e.message);
 	}
 };

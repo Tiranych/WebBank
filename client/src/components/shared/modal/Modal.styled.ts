@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { footerBackgroundColor, mainColor } from '@utils/variables';
+import { darkColor, mainColor } from '@utils/variables';
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	color: ${footerBackgroundColor};
+	color: ${darkColor};
 	background-color: ${mainColor};
 `;
 

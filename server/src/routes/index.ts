@@ -1,41 +1,32 @@
 import { Router } from 'express';
 import {
-	getCredits,
-	createCredit,
-	updateCredit,
-	deleteCredit,
-} from '../controllers/creditController';
-import { getContracts, createContract, deleteContract } from '../controllers/contractController';
-import { getClients, createClient, deleteClient } from '../controllers/clientController';
+	getClients,
+	updateClient,
+	deleteClient,
+	getClientsById,
+} from '../controllers/clientController';
 import {
 	createCreditHistory,
 	deleteCreditHistory,
+	getCreditHistoryForClient,
 	getCreditHistories,
 } from '../controllers/creditHistoryController';
 import { handleFormController } from '../controllers/handleFormController';
+import { scoringController } from '../controllers/scoringController';
 
 const router = Router();
 
-router.post('/form', handleFormController);
-
-router.get('/api/credits', getCredits);
-router.post('/api/credits', createCredit);
-router.put('/api/credits/:id', updateCredit);
-router.delete('/api/credits/:id', deleteCredit);
-
-router.get('/api/contracts', getContracts);
-router.post('/api/contracts', createContract);
-//router.put("/api/contracts/:id", updateContract);
-router.delete('/api/contracts/:id', deleteContract);
-
 router.get('/api/clients', getClients);
-//router.post('/api/clients', createClient);
-//router.put("/api/clients/:id", updateClient);
-router.delete('/api/clients/:id', deleteClient);
+router.get('/api/clients/:id', getClientsById);
+router.put('/api/clients/:id', updateClient);
+//router.delete('/api/clients/:id', deleteClient);
 
 router.get('/api/credit-histories', getCreditHistories);
-router.post('/api/credit-history', createCreditHistory);
+router.get('/api/credit-history', getCreditHistoryForClient);
 //router.put("/api/credit-history/:id", updateCreditHistory);
-router.delete('/api/credit-history/:id', deleteCreditHistory);
+//router.delete('/api/credit-history/:id', deleteCreditHistory);
+
+router.post('/form', handleFormController);
+router.post('/api/predict', scoringController);
 
 export default router;

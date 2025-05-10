@@ -1,9 +1,12 @@
 export const mainColor = 'rgb(255, 255, 255)';
 export const headerBackgroundColor = 'rgb(56, 118, 140)';
 export const mainBackgroundColor = 'rgb(243, 243, 243)';
-export const footerBackgroundColor = 'rgb(30, 27, 27)';
+export const darkColor = 'rgb(30, 27, 27)';
 export const buttonBorderColor = 'rgba(255, 197, 6, 0.884)';
 export const buttonBackgroundColor = 'rgba(0, 0, 0, 0.856)';
 export const cardBackgroundColor = 'rgb(161, 193, 216)';
 export const errorColor = 'rgb(204, 50, 36)';
 export const majorBlue = 'rgb(3, 155, 229)';
+export const grayColor = 'rgb(163, 162, 162)';
+export const acceptColor = 'rgb(86, 156, 95)';
+export const refuseColor = 'rgb(168, 62, 62)';
