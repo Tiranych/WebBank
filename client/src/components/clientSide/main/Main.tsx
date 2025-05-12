@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Container } from '@components/shared/container';
-import { Modal } from '@components/shared/modal';
 
 import { Section, Title, Wrapper } from './Main.styled';
 import { Form } from './form';
+import { Modal } from './modal';
 
 type MainProps = {
 	showModal: boolean;
