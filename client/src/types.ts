@@ -60,6 +60,7 @@ export type TClient = {
 	workplace: string;
 	workaddress: string;
 	processed: boolean;
+	status: 'ACCEPTED' | 'REJECTED';
 };
 
 export type DecisionOptions = {
@@ -94,6 +95,12 @@ export type TScoringResponse = {
 
 export type TQuestionnaireResponse = {
 	success: boolean;
+};
+
+export type TAuthResponse = {
+	idClient: number;
+	success: boolean;
+	error: string;
 };
 
 export type TClients = TClient[];

@@ -22,17 +22,21 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export const IncomeDiagram = ({ clients }: IncomeDiagramProps) => {
 	let res = [0, 0, 0, 0, 0];
 
+	const clientsToShow = clients.filter(
+		(client) => client.processed && client.status === 'ACCEPTED'
+	);
+
 	const groupByIncome = () => {
-		clients.forEach((client) => {
+		clientsToShow.forEach((client) => {
 			const income = client.income;
 
-			if (income >= 10000 && income < 30000) {
+			if (income >= 50000 && income < 80000) {
 				res[0]++;
-			} else if (income >= 30000 && income < 50000) {
+			} else if (income >= 80000 && income < 110000) {
 				res[1]++;
-			} else if (income >= 50000 && income < 80000) {
+			} else if (income >= 110000 && income < 150000) {
 				res[2]++;
-			} else if (income >= 80000 && income < 100000) {
+			} else if (income >= 150000 && income < 200000) {
 				res[3]++;
 			} else {
 				res[4]++;
@@ -44,15 +48,15 @@ export const IncomeDiagram = ({ clients }: IncomeDiagramProps) => {
 
 	return (
 		<Wrapper>
-			<Subtitle>Диаграмма по доходу</Subtitle>
+			<Subtitle>Диаграмма одобренных кредитов по доходу</Subtitle>
 			<Pie
 				data={{
 					labels: [
-						'10тыс. - 30тыс. рублей',
-						'30тыс. - 50тыс. рублей',
 						'50тыс. - 80тыс. рублей',
 						'80тыс. - 110тыс. рублей',
-						'110тыс.+ рублей',
+						'110тыс. - 150тыс. рублей',
+						'150тыс. - 200тыс. рублей',
+						'200тыс.+ рублей',
 					],
 					datasets: [
 						{
@@ -69,7 +73,7 @@ export const IncomeDiagram = ({ clients }: IncomeDiagramProps) => {
 							callbacks: {
 								label: (data) => {
 									let value = data.dataset.data[data.dataIndex];
-									return ((value / clients.length) * 100).toFixed(1) + '%';
+									return ((value / clientsToShow.length) * 100).toFixed(1) + '%';
 								},
 							},
 						},

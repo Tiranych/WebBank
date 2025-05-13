@@ -13,6 +13,7 @@ import {
 } from '../controllers/creditHistoryController';
 import { handleFormController } from '../controllers/handleFormController';
 import { scoringController } from '../controllers/scoringController';
+import { signup, signin } from '../controllers/authController';
 
 const router = Router();
 
@@ -28,5 +29,7 @@ router.get('/api/credit-history', getCreditHistoryForClient);
 
 router.post('/form', handleFormController);
 router.post('/api/predict', scoringController);
+router.post('/signup', signup);
+router.post('/signin', signin);
 
 export default router;

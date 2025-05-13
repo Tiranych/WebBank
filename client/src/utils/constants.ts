@@ -15,7 +15,7 @@ type WorkStatusKeys =
 	| 'MILITARY'
 	| 'RETIRED'
 	| 'UN_EMPLOYED';
-type EstateKeys = 'FLAT' | 'HOUSE' | 'OFFICE' | 'LAND_PLOT' | 'GARAGE';
+type EstateKeys = 'FLAT' | 'HOUSE' | 'OFFICE' | 'LAND_PLOT' | 'GARAGE' | 'DACHA';
 type ScheduleKeys = 'ANNUITIES' | 'DIFFERENTIATED';
 type PurposeKeys = 'CAR_PURCHASE' | 'ESTATE_PURCHASE' | 'CONSUMER_PURPOSE';
 type ProvisionKeys = 'ESTATE' | 'TRANSPORT' | 'GUARANTEE' | 'BILL' | 'NO_PROVISION';
@@ -52,6 +52,7 @@ export const EstateTypes: Record<EstateKeys, string> = {
 	OFFICE: 'Офис',
 	LAND_PLOT: 'Земельный участок',
 	GARAGE: 'Гараж',
+	DACHA: 'Дача',
 };
 
 export const ScheduleTypes: Record<ScheduleKeys, string> = {
@@ -66,7 +67,7 @@ export const PurposeTypes: Record<PurposeKeys, string> = {
 };
 
 export const ProvisionTypes: Record<ProvisionKeys, string> = {
-	ESTATE: 'Недвижмость',
+	ESTATE: 'Недвижимость',
 	TRANSPORT: 'Движимое имущество',
 	GUARANTEE: 'Поручительство',
 	BILL: 'Вексель',

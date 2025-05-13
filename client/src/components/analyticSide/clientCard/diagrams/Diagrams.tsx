@@ -1,5 +1,6 @@
 import React from 'react';
-import { TClients } from 'types';
+
+import { useClients } from '@contexts/ClientsContext';
 
 import { Container } from '@components/shared/container';
 
@@ -7,11 +8,9 @@ import { BorderBox, Section, Wrapper } from './Diagrams.styled';
 import { AgeDiagram } from './ageDiagram';
 import { IncomeDiagram } from './incomeDiagram';
 
-type DiagramProps = {
-	clients: TClients;
-};
+export const Diagrams = () => {
+	const clients = useClients();
 
-export const Diagrams = ({ clients }: DiagramProps) => {
 	return (
 		<Section>
 			<Container>

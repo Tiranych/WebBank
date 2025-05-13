@@ -1,40 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
-import { TClient, TClients } from 'types';
 
-import { getClients } from '@services/getClients';
+import { useClients } from '@contexts/ClientsContext';
 
 import { Container } from '@components/shared/container';
 import { Spin } from '@components/shared/spin/Spin';
-
-import { camelizeData } from '@utils/camelize';
 
 import { Box, Inner, Section, Subtitle, Title, Wrapper } from './Main.styled';
 
 type MainProps = {
 	isLoading: boolean;
-	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const AnalyticMain = ({ isLoading, setIsLoading }: MainProps) => {
-	const [clients, setClients] = useState<TClients>([]);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setIsLoading(true);
-				const clientsRes = await getClients();
-				const camelizedClients = camelizeData<TClient>(clientsRes);
-				setClients(camelizedClients);
-			} catch (error) {
-				console.error(error);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchData();
-	}, []);
+export const AnalyticMain = ({ isLoading }: MainProps) => {
+	const clients = useClients();
 
 	const clientsToProcess = clients.filter((client) => !client.processed);
 

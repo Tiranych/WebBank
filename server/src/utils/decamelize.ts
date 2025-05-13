@@ -11,9 +11,11 @@ export const camelizeData = (data: any) => {
 
 export const decamelizeData = (data: any) => {
 	let res: any = {};
-	Object.entries(data).forEach((entry) => {
-		res[`${humps.decamelize(entry[0])}`] = entry[1];
-	});
+	if (data) {
+		Object.entries(data).forEach((entry) => {
+			res[`${humps.decamelize(entry[0])}`] = entry[1];
+		});
+	}
 
 	return res;
 };

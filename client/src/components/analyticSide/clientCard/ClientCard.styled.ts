@@ -22,9 +22,9 @@ export const Section = styled.section`
 `;
 
 export const Title = styled.h2`
-	font-size: 40px;
+	font-size: 48px;
 	text-align: center;
-	line-height: 34px;
+	line-height: 40px;
 	margin-bottom: 20px;
 `;
 
@@ -38,21 +38,39 @@ export const Grid = styled.div`
 	gap: 0 20px;
 `;
 
-export const Inner = styled.ul`
-	font-size: 18px;
-	margin: 10px 0 20px;
+export const ListItem = styled.div`
+	margin-bottom: 10px;
+	&:last-child {
+		margin-bottom: 0;
+	}
 `;
 
-export const Row = styled.div<{ $direction?: string; $center?: boolean; $nopadding?: boolean }>`
+export const Inner = styled.ul`
+	font-size: 18px;
+`;
+
+export const Row = styled.div<{
+	$direction?: string;
+	$center?: boolean;
+	$between?: boolean;
+	$nopadding?: boolean;
+	$nocolor?: boolean;
+}>`
 	display: flex;
 	gap: 0 20px;
-	padding: 20px;
+	padding: 10px;
+	margin: 20px;
+	background-color: #fff;
+	border-radius: 7px;
 	${({ $direction }) => $direction === 'column' && 'flex-direction: column;'}
 	${({ $center }) => $center && 'justify-content: center;'}
-	${({ $nopadding }) => $nopadding && 'padding: 0px;'}
+	${({ $between }) => $between && 'justify-content: space-between;'}
+	${({ $nopadding }) => $nopadding && 'margin: 0px;'}
+	${({ $nocolor }) => $nocolor && 'background-color: inherit;'}
 `;
 
 export const Text = styled.p`
+	font-size: 22px;
 	margin-bottom: 10px;
 	&:last-child {
 		margin-bottom: 0;
@@ -68,12 +86,13 @@ export const Item = styled.li`
 	}
 `;
 
-export const Button = styled.button<{ $color: string }>`
+export const Button = styled.button<{ $color: string; $margin?: boolean }>`
 	padding: 20px;
 	border-radius: 5px;
 	${({ $color }) => $color === 'scoring' && `background-color: ${buttonBorderColor};`}
 	${({ $color }) => $color === 'accept' && `background-color: ${acceptColor};`}
 	${({ $color }) => $color === 'refuse' && `background-color: ${refuseColor};`}
+	${({ $margin }) => $margin && `margin-bottom: 10px;`}
 `;
 
 export const NotFound = styled.p`

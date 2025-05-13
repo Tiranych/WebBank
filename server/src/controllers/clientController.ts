@@ -42,7 +42,7 @@ export async function createClient(data: TClient) {
 		`INSERT INTO client (lastname, firstname, patronymic, gender, address, 
 		phone_number, birthdate, birthplace, inn, marital_status, education, assets_car, assets_estate, credit_conditions, has_cars, 
 		has_debts, has_estate, income, seniority, workstatus, workaddress, workplace, processed) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, false)`,
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) RETURNING *`,
 		[
 			data.lastname,
 			data.firstname,
@@ -55,8 +55,8 @@ export async function createClient(data: TClient) {
 			data.inn,
 			data.maritalStatus,
 			data.education,
-			data.assetsCar,
-			data.assetsEstate,
+			data.hasCars ? data.assetsCar : null,
+			data.hasEstate ? data.assetsEstate : null,
 			decamelizeData(data.creditConditions),
 			data.hasCars,
 			data.hasDebts,
@@ -66,6 +66,7 @@ export async function createClient(data: TClient) {
 			data.workstatus,
 			data.workaddress,
 			data.workplace,
+			false,
 		]
 	);
 
@@ -76,12 +77,13 @@ export async function createClient(data: TClient) {
 }
 
 export async function updateClient(req: Request, res: Response) {
-	const { idClient, status } = req.body;
+	let { idClient, status } = req.body;
+
 	try {
 		await db.query('BEGIN');
 
 		const result = await db.query(
-			'UPDATE client SET processed = true, status = $1  WHERE id_client = $2',
+			'UPDATE client SET processed = true, status = $1  WHERE id_client = $2 RETURNING *',
 			[status, idClient]
 		);
 

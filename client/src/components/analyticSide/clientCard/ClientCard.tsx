@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import {
-	DecisionOptions,
-	TClient,
-	TCreditHistories,
-	TCreditHistory,
-	TScoringResponse,
-} from 'types';
+import { TClient, TCreditHistories, TCreditHistory, TScoringResponse } from 'types';
 
-import { acceptClient } from '@services/acceptClient';
 import { getClientsById } from '@services/getClientsById';
 import { getCreditHistoryById } from '@services/getCreditHistoryById';
 import { makeScoringRequest } from '@services/makeScoringRequest';
+import { processClient } from '@services/processClient';
 
 import { Container } from '@components/shared/container';
 import { Spin } from '@components/shared/spin/Spin';
@@ -31,6 +25,7 @@ import {
 	Grid,
 	Inner,
 	Item,
+	ListItem,
 	NotFound,
 	Row,
 	Section,
@@ -38,6 +33,7 @@ import {
 	Title,
 	Wrapper,
 } from './ClientCard.styled';
+import { Diagrams } from './diagrams';
 
 type MainProps = {
 	isLoading: boolean;
@@ -47,6 +43,7 @@ type MainProps = {
 export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 	const { id } = useParams();
 	const [isScored, setIsScored] = useState(false);
+	const [showDiagram, setShowDiagram] = useState(false);
 	const [client, setClient] = useState<TClient>();
 	const [creditHistories, setCreditHistories] = useState<TCreditHistories>();
 	const [scoringRes, setScoringRes] = useState<TScoringResponse>();
@@ -143,14 +140,19 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 		}
 	};
 
-	const updateClientClick = async () => {
+	const diagramClick = () => {
+		setShowDiagram((prev) => !prev);
+	};
+
+	const updateClientClick = async (e: any, status: string) => {
 		try {
 			setIsLoading(true);
 			if (id && scoringRes) {
-				await acceptClient(
-					id,
-					scoringRes.decision === 'Одобрено' ? 'ACCEPTED' : 'REJECTED'
-				);
+				await processClient(id, status);
+				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
+			} else if (id) {
+				await processClient(id);
+				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
 			}
 		} catch (e: any) {
 			console.log(e.message);
@@ -272,7 +274,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 											<Text>Автомобили:</Text>
 											{client.assetsCar.length > 0 &&
 												client.assetsCar.map((car, index) => (
-													<div key={index}>
+													<ListItem key={index}>
 														{client.assetsCar.length > 1 && (
 															<p>{index + 1 + '.'}</p>
 														)}
@@ -294,7 +296,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 																<p>{car.price + ' руб.'}</p>
 															</Item>
 														</Inner>
-													</div>
+													</ListItem>
 												))}
 										</Row>
 									) : (
@@ -307,7 +309,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 											<Text>Недвижимости:</Text>
 											{client.assetsEstate.length > 0 &&
 												client.assetsEstate.map((estate, index) => (
-													<div key={index}>
+													<ListItem key={index}>
 														{client.assetsEstate.length > 1 && (
 															<p>{index + 1 + '.'}</p>
 														)}
@@ -329,7 +331,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 																<p>{estate.price + ' руб.'}</p>
 															</Item>
 														</Inner>
-													</div>
+													</ListItem>
 												))}
 										</Row>
 									) : (
@@ -342,7 +344,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 											<Text>Задолженности:</Text>
 											{creditHistories &&
 												creditHistories.map((creditHistory, index) => (
-													<div key={creditHistory.idCreditHistory}>
+													<ListItem key={creditHistory.idCreditHistory}>
 														{creditHistories.length > 1 && (
 															<p>{index + 1 + '.'}</p>
 														)}
@@ -416,7 +418,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 																</p>
 															</Item>
 														</Inner>
-													</div>
+													</ListItem>
 												))}
 										</Row>
 									) : (
@@ -426,27 +428,43 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 									)}
 								</div>
 							</Grid>
-							<Row>
-								<Button $color={'scoring'} onClick={scoringClick}>
-									Скоринг
-								</Button>
-								{isScored && (
-									<Row $direction='column' $nopadding $center>
-										<Text>Результаты скоринга: {scoringRes?.decision}</Text>
-										<Text>
-											Риск невыплаты кредита составляет:{' '}
-											{scoringRes &&
-												(scoringRes.riskScore * 100).toFixed(2) + '%'}
-										</Text>
-									</Row>
-								)}
+							<Row $between $nocolor>
+								<div>
+									<Button $margin $color={'scoring'} onClick={scoringClick}>
+										Скоринг
+									</Button>
+									{isScored && (
+										<Row $direction='column' $nopadding $center>
+											<Text>Результаты скоринга: {scoringRes?.decision}</Text>
+											<Text>
+												Риск невыплаты кредита составляет:{' '}
+												{scoringRes &&
+													(scoringRes.riskScore * 100).toFixed(2) + '%'}
+											</Text>
+										</Row>
+									)}
+								</div>
 							</Row>
-							<Row $center>
+							<Row $nocolor>
+								<div>
+									<Button $color={'scoring'} onClick={diagramClick}>
+										{showDiagram ? 'Скрыть графики' : 'Посмотреть графики'}
+									</Button>
+								</div>
+								{showDiagram && <Diagrams />}
+							</Row>
+							<Row $nocolor $center>
 								<Grid>
-									<Button $color={'accept'} onClick={updateClientClick}>
+									<Button
+										$color={'accept'}
+										onClick={(e) => updateClientClick(e, 'ACCEPTED')}
+									>
 										Одобрить
 									</Button>
-									<Button $color={'refuse'} onClick={updateClientClick}>
+									<Button
+										$color={'refuse'}
+										onClick={(e) => updateClientClick(e, 'REJECTED')}
+									>
 										Отказать
 									</Button>
 								</Grid>

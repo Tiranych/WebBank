@@ -88,3 +88,8 @@ export type TScoringResponse = {
 };
 
 export type TCreditHistories = TCreditHistory[];
+
+export type TAuthRequest = {
+	username: string;
+	password: string;
+};

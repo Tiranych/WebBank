@@ -1,12 +1,14 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { TClients } from 'types';
+import { TClient, TClients } from 'types';
+
+import { getClientAge } from '@utils/getClientInfo';
 
 import { Subtitle, Wrapper } from './AgeDiagram.styled';
 
 type AgeDiagramProps = {
-	clients: any;
+	clients: TClients;
 };
 
 const ageDiagramColors = [
@@ -22,9 +24,13 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export const AgeDiagram = ({ clients }: AgeDiagramProps) => {
 	let res = [0, 0, 0, 0, 0];
 
+	const clientsToShow = clients.filter(
+		(client) => client.processed && client.status === 'ACCEPTED'
+	);
+
 	const groupByAge = () => {
-		clients.forEach((client: any) => {
-			const age = client.age;
+		clientsToShow.forEach((client: TClient) => {
+			const age = getClientAge(client.birthdate);
 
 			if (age >= 18 && age < 25) {
 				res[0]++;
@@ -44,7 +50,7 @@ export const AgeDiagram = ({ clients }: AgeDiagramProps) => {
 
 	return (
 		<Wrapper>
-			<Subtitle>Диаграмма по возрасту</Subtitle>
+			<Subtitle>Диаграмма одобренных кредитов по возрасту</Subtitle>
 			<Pie
 				data={{
 					labels: ['18-24 лет', '25-30 лет', ' 31-36 лет', '37-45 лет', '45+ лет'],
@@ -62,7 +68,7 @@ export const AgeDiagram = ({ clients }: AgeDiagramProps) => {
 							callbacks: {
 								label: (data) => {
 									let value = data.dataset.data[data.dataIndex];
-									return ((value / clients.length) * 100).toFixed(1) + '%';
+									return ((value / clientsToShow.length) * 100).toFixed(1) + '%';
 								},
 							},
 						},

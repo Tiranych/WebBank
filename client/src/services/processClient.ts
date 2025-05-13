@@ -1,4 +1,4 @@
-export const acceptClient = async (id: string, status: string) => {
+export const processClient = async (id: string, status?: string) => {
 	try {
 		return fetch(`http://${process.env.SERVER_HOST_NAME}/api/clients/${id}`, {
 			method: 'PUT',

@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 
-import { headerBackgroundColor } from '@utils/variables';
+import { cardBackgroundColor, headerBackgroundColor } from '@utils/variables';
 
 export const Wrapper = styled.header`
 	padding: 30px 0;
 	background-color: ${headerBackgroundColor};
+`;
+
+export const Inner = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 `;
 
 export const Logo = styled.a`
@@ -24,15 +30,19 @@ export const Title = styled.h1`
 	margin-top: 15px;
 `;
 
+export const Button = styled.button`
+	font-size: 20px;
+	border-radius: 10px;
+	background-color: ${cardBackgroundColor};
+	padding: 10px;
+
+	& + & {
+		margin-left: 20px;
+	}
+`;
+
 export const Subtitle = styled.h3`
 	font-size: 24px;
 	line-height: 30px;
 	margin-top: 15px;
-`;
-
-export const LinkBlock = styled.div`
-	display: flex;
-	gap: 0 20px;
-	font-size: 20px;
-	padding-top: 15px;
 `;
