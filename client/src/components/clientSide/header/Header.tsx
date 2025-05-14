@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router';
+
+import { useAdmin, useAuth, useIDClient } from '@contexts/index';
 
 import { Container } from '@components/shared/container';
 
-import { Button, Img, Inner, Logo, Subtitle, Title, Wrapper } from './Header.styled';
+import { Box, Img, Inner, Logo, NavInner, Subtitle, Title, Wrapper } from './Header.styled';
 import { SigninModal } from './signinModal';
 import { SignupModal } from './signupModal';
 
@@ -10,22 +13,13 @@ type HeaderProps = {
 	showModal: boolean;
 	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	isAuth: boolean;
-	setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-	isAdmin: boolean;
-	setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Header = ({
-	showModal,
-	setShowModal,
-	setIsLoading,
-	isAuth,
-	setIsAuth,
-	isAdmin,
-	setIsAdmin,
-}: HeaderProps) => {
+const Header = ({ showModal, setShowModal, setIsLoading }: HeaderProps) => {
 	const [authMode, setAuthMode] = useState('');
+	const idClient = useIDClient();
+	const isAuth = useAuth();
+	const isAdmin = useAdmin();
 
 	const handleSigninClick = () => {
 		setShowModal(true);
@@ -37,23 +31,19 @@ const Header = ({
 		setAuthMode('signup');
 	};
 
+	const handleExitClick = () => {
+		localStorage.removeItem('AUTH_TOKEN');
+		window.location.reload();
+	};
+
 	return (
 		<Wrapper>
 			<Container>
 				{showModal && authMode === 'signin' && (
-					<SigninModal
-						setShowModal={setShowModal}
-						setIsLoading={setIsLoading}
-						setIsAuth={setIsAuth}
-						setIsAdmin={setIsAdmin}
-					/>
+					<SigninModal setShowModal={setShowModal} setIsLoading={setIsLoading} />
 				)}
 				{showModal && authMode === 'signup' && (
-					<SignupModal
-						setShowModal={setShowModal}
-						setIsLoading={setIsLoading}
-						setIsAuth={setIsAuth}
-					/>
+					<SignupModal setShowModal={setShowModal} setIsLoading={setIsLoading} />
 				)}
 				<Inner>
 					<Logo href={isAdmin ? '/analytic' : '/'}>
@@ -61,12 +51,25 @@ const Header = ({
 						<Title>WebBank</Title>
 					</Logo>
 					{!isAuth ? (
-						<div>
-							<Button onClick={handleSigninClick}>Войти</Button>
-							<Button onClick={handleSignupClick}>Регистрация</Button>
-						</div>
+						<NavInner>
+							<Box>
+								<button onClick={handleSigninClick}>Войти</button>
+							</Box>
+							<Box>
+								<button onClick={handleSignupClick}>Регистрация</button>
+							</Box>
+						</NavInner>
 					) : (
-						<button>Личный кабинет</button>
+						<NavInner>
+							{!isAdmin && (
+								<Box>
+									<Link to={`/profile/${idClient}`}>Личный кабинет</Link>
+								</Box>
+							)}
+							<Box>
+								<button onClick={handleExitClick}>Выйти</button>
+							</Box>
+						</NavInner>
 					)}
 				</Inner>
 				<Subtitle>Быстрый сервис для получения кредита!</Subtitle>

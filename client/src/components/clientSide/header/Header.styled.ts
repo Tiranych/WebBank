@@ -30,7 +30,11 @@ export const Title = styled.h1`
 	margin-top: 15px;
 `;
 
-export const Button = styled.button`
+export const NavInner = styled.div`
+	display: flex;
+`;
+
+export const Box = styled.div`
 	font-size: 20px;
 	border-radius: 10px;
 	background-color: ${cardBackgroundColor};

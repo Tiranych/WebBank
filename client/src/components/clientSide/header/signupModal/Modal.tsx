@@ -4,6 +4,8 @@ import { TAuthResponse } from 'types';
 
 import { signup } from '@services/signup';
 
+import { camelizeData } from '@utils/camelize';
+
 import {
 	Button,
 	ButtonBox,
@@ -20,11 +22,9 @@ import {
 export const SignupModal = ({
 	setShowModal,
 	setIsLoading,
-	setIsAuth,
 }: {
 	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [errorText, setErrorText] = useState('');
@@ -46,22 +46,22 @@ export const SignupModal = ({
 	return (
 		<Wrapper
 			onSubmit={methods.handleSubmit(async (data) => {
-				if (setIsLoading && setIsAuth) {
-					try {
-						setIsLoading(true);
-						const response = await signup<TAuthResponse>(data);
-						if (response.success) {
-							setIsAuth(true);
-							window.location.assign('/#/');
-							setShowModal(false);
-						} else {
-							setErrorText(response.error);
-						}
-					} catch (e: any) {
-						console.log(e.message);
-					} finally {
-						setIsLoading(false);
+				try {
+					setIsLoading(true);
+					const response = await signup<TAuthResponse>(data);
+					const responseCamelized = camelizeData([response])[0];
+					if (response.success) {
+						localStorage.setItem('id_client', String(responseCamelized.idClient));
+						localStorage.setItem('AUTH_TOKEN', responseCamelized.authToken);
+						window.location.assign('/');
+						setShowModal(false);
+					} else {
+						setErrorText(response.error);
 					}
+				} catch (e: any) {
+					console.log(e.message);
+				} finally {
+					setIsLoading(false);
 				}
 			})}
 		>

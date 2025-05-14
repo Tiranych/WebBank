@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { TQuestionnaireResponse } from 'types';
 
+import { useIDClient } from '@contexts/index';
+
 import { sendQuestionnaire } from '@services/sendQuestionnaire';
 
 import { Spin } from '@components/shared/spin/Spin';
@@ -17,12 +19,15 @@ export const Form = ({
 	isLoading,
 	setIsLoading,
 	setShowModal,
+	setModalText,
 }: {
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setModalText: React.Dispatch<React.SetStateAction<string>>;
 }) => {
 	const [step, setStep] = useState(1);
+	const id = useIDClient();
 
 	const methods = useForm({
 		mode: 'all',
@@ -36,10 +41,11 @@ export const Form = ({
 					/* console.log(data); */
 					try {
 						setIsLoading(true);
-						const response = await sendQuestionnaire<TQuestionnaireResponse>(data);
-						if (response.success) {
-							setShowModal(true);
+						const response = await sendQuestionnaire<TQuestionnaireResponse>(data, id);
+						if (!response.success) {
+							setModalText(response.error || '');
 						}
+						setShowModal(true);
 					} catch (e) {
 						console.log(e);
 					} finally {

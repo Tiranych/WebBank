@@ -4,17 +4,16 @@ import { createCreditHistory } from './creditHistoryController';
 import { createClient } from './clientController';
 
 export const handleFormController = async (req: Request, res: Response) => {
-	const data: TClient = req.body;
+	const data: TClient = req.body.data;
+	const id = req.body.id;
+
 	try {
-		let idClient = -1;
+		if (id !== -1) {
+			await createClient(id, data);
 
-		idClient = await createClient(data);
-
-		if (data.hasDebts) {
-			await createCreditHistory(data, idClient);
-		}
-
-		if (idClient !== -1) {
+			if (data.hasDebts) {
+				await createCreditHistory(data, id);
+			}
 			res.status(200).json({ success: true });
 		} else {
 			throw new Error('Клиент не добавлен в БД');

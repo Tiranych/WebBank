@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Container } from '@components/shared/container';
 
@@ -14,6 +14,8 @@ type MainProps = {
 };
 
 export const ClientMain = ({ showModal, setShowModal, isLoading, setIsLoading }: MainProps) => {
+	const [modalText, setModalText] = useState('');
+
 	return (
 		<Wrapper>
 			<Section>
@@ -23,8 +25,9 @@ export const ClientMain = ({ showModal, setShowModal, isLoading, setIsLoading }:
 						setShowModal={setShowModal}
 						isLoading={isLoading}
 						setIsLoading={setIsLoading}
+						setModalText={setModalText}
 					/>
-					{showModal && <Modal setShowModal={setShowModal} />}
+					{showModal && <Modal modalText={modalText} setShowModal={setShowModal} />}
 				</Container>
 			</Section>
 		</Wrapper>

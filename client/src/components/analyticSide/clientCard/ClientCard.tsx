@@ -42,6 +42,7 @@ type MainProps = {
 
 export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 	const { id } = useParams();
+	const idNum = Number(id) || -1;
 	const [isScored, setIsScored] = useState(false);
 	const [showDiagram, setShowDiagram] = useState(false);
 	const [client, setClient] = useState<TClient>();
@@ -54,7 +55,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 				setIsLoading(true);
 
 				if (id) {
-					const clientRes = await getClientsById(id);
+					const clientRes = await getClientsById(idNum);
 					const camelizedClient = camelizeData<TClient>(clientRes);
 					setClient(camelizedClient[0]);
 				}
@@ -74,7 +75,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 					setIsLoading(true);
 
 					if (id) {
-						const creditHistoriesRes = await getCreditHistoryById(id);
+						const creditHistoriesRes = await getCreditHistoryById(idNum);
 						const camelizedCreditHistories =
 							camelizeData<TCreditHistory>(creditHistoriesRes);
 
@@ -148,10 +149,10 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 		try {
 			setIsLoading(true);
 			if (id && scoringRes) {
-				await processClient(id, status);
+				await processClient(idNum, status);
 				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
 			} else if (id) {
-				await processClient(id);
+				await processClient(idNum);
 				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
 			}
 		} catch (e: any) {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../config/db';
 import { TClient } from 'types';
-import { decamelizeData, camelizeData } from '../utils/decamelize';
+import { decamelizeData } from '../utils/decamelize';
 
 export async function getClients(req: Request, res: Response) {
 	try {
@@ -33,47 +33,54 @@ export async function getClientsById(req: Request, res: Response) {
 	}
 }
 
-export async function createClient(data: TClient) {
-	let result = -1;
+export async function createClient(id: number, data: TClient) {
+	try {
+		await db.query('BEGIN');
 
-	await db.query('BEGIN');
-
-	const res = await db.query(
-		`INSERT INTO client (lastname, firstname, patronymic, gender, address, 
+		await db.query(
+			`INSERT INTO client (id_client, lastname, firstname, patronymic, gender, address, 
 		phone_number, birthdate, birthplace, inn, marital_status, education, assets_car, assets_estate, credit_conditions, has_cars, 
 		has_debts, has_estate, income, seniority, workstatus, workaddress, workplace, processed) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) RETURNING *`,
-		[
-			data.lastname,
-			data.firstname,
-			data.patronymic,
-			data.gender,
-			data.address,
-			data.phoneNumber,
-			data.birthdate,
-			data.birthplace,
-			data.inn,
-			data.maritalStatus,
-			data.education,
-			data.hasCars ? data.assetsCar : null,
-			data.hasEstate ? data.assetsEstate : null,
-			decamelizeData(data.creditConditions),
-			data.hasCars,
-			data.hasDebts,
-			data.hasEstate,
-			data.income,
-			data.seniority,
-			data.workstatus,
-			data.workaddress,
-			data.workplace,
-			false,
-		]
-	);
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)`,
+			[
+				id,
+				data.lastname,
+				data.firstname,
+				data.patronymic,
+				data.gender,
+				data.address,
+				data.phoneNumber,
+				data.birthdate,
+				data.birthplace,
+				data.inn,
+				data.maritalStatus,
+				data.education,
+				data.hasCars ? data.assetsCar : null,
+				data.hasEstate ? data.assetsEstate : null,
+				decamelizeData(data.creditConditions),
+				data.hasCars,
+				data.hasDebts,
+				data.hasEstate,
+				data.income,
+				data.seniority,
+				data.workstatus,
+				data.workaddress,
+				data.workplace,
+				false,
+			]
+		);
 
-	result = camelizeData(res.rows[0]).idClient;
-
-	await db.query('COMMIT');
-	return result;
+		await db.query('COMMIT');
+	} catch (err: any) {
+		if (
+			err.message ===
+			'повторяющееся значение ключа нарушает ограничение уникальности "client_pkey"'
+		) {
+			{
+				throw new Error('Вы уже отправляли заявку');
+			}
+		}
+	}
 }
 
 export async function updateClient(req: Request, res: Response) {

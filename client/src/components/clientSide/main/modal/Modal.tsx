@@ -3,8 +3,10 @@ import React from 'react';
 import { ButtonBox, Img, Inner, Subtitle, Title, Wrapper } from './Modal.styled';
 
 export const Modal = ({
+	modalText,
 	setShowModal,
 }: {
+	modalText: string;
 	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 	const handleCloseClick = () => {
@@ -20,8 +22,14 @@ export const Modal = ({
 				</button>
 			</ButtonBox>
 			<Inner>
-				<Title>Ваша заявка отправлена!</Title>
-				<Subtitle>Мы её рассмотрим в ближайшее время</Subtitle>
+				{modalText ? (
+					<Title>{modalText}</Title>
+				) : (
+					<>
+						<Title>Ваша заявка отправлена!</Title>
+						<Subtitle>Мы её рассмотрим в ближайшее время</Subtitle>
+					</>
+				)}
 			</Inner>
 		</Wrapper>
 	);

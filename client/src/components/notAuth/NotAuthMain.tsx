@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router';
+
+import { useAuth } from '@contexts/index';
 
 import { Container } from '@components/shared/container';
 
-import { Section, Title, Wrapper } from './NotAuthMain.styled';
+import { Button, Section, Title, Wrapper } from './NotAuthMain.styled';
 
-export const NotAuthMain = () => {
+export const NotAuthMain = ({ text }: { text: string }) => {
+	const isAuth = useAuth();
+
 	return (
 		<Wrapper>
 			<Section>
 				<Container>
-					<Title>Для начала работы авторизуйтесь</Title>
+					<Title>{text}</Title>
+					{isAuth && (
+						<Button>
+							<Link to={'/'}>Вернуться на главную страницу</Link>
+						</Button>
+					)}
 				</Container>
 			</Section>
 		</Wrapper>

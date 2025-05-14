@@ -22,13 +22,9 @@ import {
 export const SigninModal = ({
 	setShowModal,
 	setIsLoading,
-	setIsAuth,
-	setIsAdmin,
 }: {
 	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-	setIsAdmin: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [errorText, setErrorText] = useState('');
@@ -49,32 +45,22 @@ export const SigninModal = ({
 	return (
 		<Wrapper
 			onSubmit={methods.handleSubmit(async (data) => {
-				if (setIsLoading && setIsAuth) {
-					try {
-						setIsLoading(true);
-						const response = await signin<TAuthResponse>(data);
-						const responseCamelized = camelizeData([response]);
-						console.log(typeof process.env.ADMIN_ID);
-						if (response.success) {
-							setIsAuth(true);
-							if (
-								responseCamelized[0].idClient ===
-								(Number(process.env.ADMIN_ID) || -1)
-							) {
-								setIsAdmin(true);
-								// Хард код id админа
-								window.location.assign('/analytic');
-							} else {
-								window.location.assign('/');
-							}
-							setShowModal(false);
-						} else {
-							setErrorText(response.error);
-						}
-					} catch (e: any) {
-					} finally {
-						setIsLoading(false);
+				try {
+					setIsLoading(true);
+					const response = await signin<TAuthResponse>(data);
+					const responseCamelized = camelizeData([response])[0];
+					if (response.success) {
+						localStorage.setItem('id_client', String(responseCamelized.idClient));
+						localStorage.setItem('AUTH_TOKEN', responseCamelized.authToken);
+						window.location.reload();
+						setShowModal(false);
+					} else {
+						setErrorText(response.error);
 					}
+				} catch (e: any) {
+					console.log(e.message);
+				} finally {
+					setIsLoading(false);
 				}
 			})}
 		>

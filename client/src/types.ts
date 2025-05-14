@@ -95,11 +95,13 @@ export type TScoringResponse = {
 
 export type TQuestionnaireResponse = {
 	success: boolean;
+	error?: string;
 };
 
 export type TAuthResponse = {
 	idClient: number;
 	success: boolean;
+	authToken: string;
 	error: string;
 };
 

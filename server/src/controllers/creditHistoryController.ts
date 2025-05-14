@@ -18,7 +18,7 @@ export async function getCreditHistories(req: Request, res: Response) {
 }
 
 export async function getCreditHistoryForClient(req: Request, res: Response) {
-	let id = Number(String(req.query.id));
+	let id = req.query.id;
 
 	try {
 		await db.query('BEGIN');

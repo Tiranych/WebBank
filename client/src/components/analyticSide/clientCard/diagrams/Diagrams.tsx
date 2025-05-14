@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useClients } from '@contexts/ClientsContext';
+import { useClients } from '@contexts/index';
 
 import { Container } from '@components/shared/container';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { darkColor, mainBackgroundColor } from '@utils/variables';
+import { cardBackgroundColor, darkColor, mainBackgroundColor } from '@utils/variables';
 
 export const Wrapper = styled.main`
 	color: ${darkColor};
@@ -15,6 +15,21 @@ export const Section = styled.section`
 
 export const Title = styled.h2`
 	font-size: 48px;
+	text-align: center;
 	line-height: 40px;
 	margin-bottom: 20px;
+`;
+
+export const Button = styled.button`
+	font-size: 26px;
+	padding: 15px;
+	border-radius: 8px;
+	width: 600px;
+	margin: 0 auto;
+	background-color: ${cardBackgroundColor};
+	transition: transform 0.4s;
+
+	&:hover {
+		transform: scale(1.05);
+	}
 `;

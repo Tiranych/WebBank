@@ -4,6 +4,7 @@ export const signin = <T>(data: FieldValues) => {
 	return fetch('http://localhost:3000/signin', {
 		method: 'POST',
 		headers: {
+			Authorization: `Bearer ${localStorage.getItem('AUTH_TOKEN')}`,
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(data),
