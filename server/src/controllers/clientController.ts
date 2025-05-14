@@ -100,13 +100,3 @@ export async function updateClient(req: Request, res: Response) {
 		res.status(500).json({ error: err.message });
 	}
 }
-
-export async function deleteClient(req: Request, res: Response) {
-	const { id } = req.params;
-	try {
-		await db.query('DELETE FROM client WHERE id_client = $1', [id]);
-		res.status(204).send();
-	} catch (err: any) {
-		res.status(500).json({ error: err.message });
-	}
-}

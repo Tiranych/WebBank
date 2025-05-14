@@ -35,6 +35,7 @@ export const NavInner = styled.div`
 `;
 
 export const Box = styled.div`
+	display: flex;
 	font-size: 20px;
 	border-radius: 10px;
 	background-color: ${cardBackgroundColor};
@@ -43,6 +44,11 @@ export const Box = styled.div`
 	& + & {
 		margin-left: 20px;
 	}
+`;
+
+export const Button = styled(Box).attrs({ as: 'button' })`
+	border: none;
+	cursor: pointer;
 `;
 
 export const Subtitle = styled.h3`

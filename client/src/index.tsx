@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router';
+import { HashRouter } from 'react-router';
 
 import App from './App';
 import { IsAuthContext } from './contexts';
@@ -13,10 +13,10 @@ if (!index) {
 	const root = createRoot(index);
 
 	root.render(
-		<BrowserRouter>
+		<HashRouter>
 			<IsAuthContext.Provider value={!!localStorage.getItem('AUTH_TOKEN')}>
 				<App />
 			</IsAuthContext.Provider>
-		</BrowserRouter>
+		</HashRouter>
 	);
 }

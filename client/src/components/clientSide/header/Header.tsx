@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 import { useAdmin, useAuth, useIDClient } from '@contexts/index';
 
 import { Container } from '@components/shared/container';
 
-import { Box, Img, Inner, Logo, NavInner, Subtitle, Title, Wrapper } from './Header.styled';
+import { Box, Button, Img, Inner, Logo, NavInner, Subtitle, Title, Wrapper } from './Header.styled';
 import { SigninModal } from './signinModal';
 import { SignupModal } from './signupModal';
 
@@ -20,6 +20,8 @@ const Header = ({ showModal, setShowModal, setIsLoading }: HeaderProps) => {
 	const idClient = useIDClient();
 	const isAuth = useAuth();
 	const isAdmin = useAdmin();
+	const location = useLocation();
+	const path = location.pathname;
 
 	const handleSigninClick = () => {
 		setShowModal(true);
@@ -46,29 +48,28 @@ const Header = ({ showModal, setShowModal, setIsLoading }: HeaderProps) => {
 					<SignupModal setShowModal={setShowModal} setIsLoading={setIsLoading} />
 				)}
 				<Inner>
-					<Logo href={isAdmin ? '/analytic' : '/'}>
+					<Logo href={isAdmin ? '/#/analytic' : '/'}>
 						<Img src='./assets/favicon.svg' alt='Logo' />
 						<Title>WebBank</Title>
 					</Logo>
 					{!isAuth ? (
 						<NavInner>
-							<Box>
-								<button onClick={handleSigninClick}>Войти</button>
-							</Box>
-							<Box>
-								<button onClick={handleSignupClick}>Регистрация</button>
-							</Box>
+							<Button onClick={handleSigninClick}>Войти</Button>
+							<Button onClick={handleSignupClick}>Регистрация</Button>
 						</NavInner>
 					) : (
 						<NavInner>
-							{!isAdmin && (
+							{!isAdmin && path !== `/profile/${idClient}` && (
 								<Box>
 									<Link to={`/profile/${idClient}`}>Личный кабинет</Link>
 								</Box>
 							)}
-							<Box>
-								<button onClick={handleExitClick}>Выйти</button>
-							</Box>
+							{!isAdmin && path === `/profile/${idClient}` && (
+								<Box>
+									<Link to={`/`}>Вернуться назад</Link>
+								</Box>
+							)}
+							<Button onClick={handleExitClick}>Выйти</Button>
 						</NavInner>
 					)}
 				</Inner>

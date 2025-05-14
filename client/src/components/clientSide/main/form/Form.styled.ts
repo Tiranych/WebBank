@@ -10,7 +10,7 @@ import {
 export const Wrapper = styled.form`
 	font-size: 20px;
 	line-height: 24px;
-	padding: 15px;
+	padding: 12px;
 	border-radius: 10px;
 	background-color: ${cardBackgroundColor};
 `;

@@ -88,13 +88,3 @@ export async function createCreditHistory(data: TClient, idClient: number) {
     res.status(500).json({ error: err.message });
   }
 } */
-
-export async function deleteCreditHistory(req: Request, res: Response) {
-	const { id } = req.params;
-	try {
-		await db.query('DELETE FROM credit_history WHERE id_credit_history = $1', [id]);
-		res.status(204).send();
-	} catch (err: any) {
-		res.status(500).json({ error: err.message });
-	}
-}

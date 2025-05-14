@@ -1,13 +1,6 @@
 import { Router } from 'express';
+import { getClients, updateClient, getClientsById } from '../controllers/clientController';
 import {
-	getClients,
-	updateClient,
-	deleteClient,
-	getClientsById,
-} from '../controllers/clientController';
-import {
-	createCreditHistory,
-	deleteCreditHistory,
 	getCreditHistoryForClient,
 	getCreditHistories,
 } from '../controllers/creditHistoryController';
@@ -20,12 +13,10 @@ const router = Router();
 router.get('/api/clients', auth, getClients);
 router.get('/api/clients/:id', auth, getClientsById);
 router.put('/api/clients/:id', auth, updateClient);
-//router.delete('/api/clients/:id', deleteClient);
 
 router.get('/api/credit-histories', auth, getCreditHistories);
 router.get('/api/credit-history', auth, getCreditHistoryForClient);
 //router.put("/api/credit-history/:id", updateCreditHistory);
-//router.delete('/api/credit-history/:id', deleteCreditHistory);
 
 router.get('/api/check', auth, check);
 

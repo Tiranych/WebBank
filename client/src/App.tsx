@@ -7,6 +7,7 @@ import { checkAdmin } from '@services/checkAdmin';
 
 import { ClientCard } from '@components/analyticSide/clientCard';
 import { AnalyticMain } from '@components/analyticSide/main';
+import { ClientProfile } from '@components/clientProfile';
 import { Header } from '@components/clientSide/header';
 import { ClientMain } from '@components/clientSide/main';
 import { NotAuthMain } from '@components/notAuth';
@@ -36,8 +37,8 @@ const App = () => {
 	}, []);
 
 	useEffect(() => {
-		if (window.location.pathname !== '/analytic' && isAdmin) {
-			window.location.assign('/analytic');
+		if (window.location.pathname !== '/#/analytic' && isAdmin) {
+			window.location.assign('/#/analytic');
 		}
 	}, [isAdmin]);
 
@@ -73,9 +74,7 @@ const App = () => {
 								path='/profile/:id'
 								element={
 									isAuth ? (
-										<ClientMain
-											showModal={showModal}
-											setShowModal={setShowModal}
+										<ClientProfile
 											isLoading={isLoading}
 											setIsLoading={setIsLoading}
 										/>
