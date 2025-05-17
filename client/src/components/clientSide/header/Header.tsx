@@ -13,9 +13,11 @@ type HeaderProps = {
 	showModal: boolean;
 	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	showForm: boolean;
+	setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Header = ({ showModal, setShowModal, setIsLoading }: HeaderProps) => {
+const Header = ({ showModal, setShowModal, setIsLoading, showForm, setShowForm }: HeaderProps) => {
 	const [authMode, setAuthMode] = useState('');
 	const idClient = useIDClient();
 	const isAuth = useAuth();
@@ -31,6 +33,10 @@ const Header = ({ showModal, setShowModal, setIsLoading }: HeaderProps) => {
 	const handleSignupClick = () => {
 		setShowModal(true);
 		setAuthMode('signup');
+	};
+
+	const handleOpenFormClick = () => {
+		setShowForm(true);
 	};
 
 	const handleExitClick = () => {
@@ -59,6 +65,9 @@ const Header = ({ showModal, setShowModal, setIsLoading }: HeaderProps) => {
 						</NavInner>
 					) : (
 						<NavInner>
+							{!isAdmin && !showForm && (
+								<Button onClick={handleOpenFormClick}>Заполнить заявку</Button>
+							)}
 							{!isAdmin && path !== `/profile/${idClient}` && (
 								<Box>
 									<Link to={`/profile/${idClient}`}>Личный кабинет</Link>

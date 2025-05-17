@@ -21,8 +21,8 @@ export const Logo = styled.a`
 `;
 
 export const Img = styled.img`
-	max-width: 64px;
-	max-height: 64px;
+	width: 64px;
+	height: 64px;
 `;
 
 export const Title = styled.h1`

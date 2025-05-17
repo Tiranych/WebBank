@@ -20,6 +20,8 @@ import {
 	ListItem,
 	Row,
 	Section,
+	StatusBlock,
+	StatusText,
 	Text,
 	Title,
 	Wrapper,
@@ -235,6 +237,18 @@ export const ClientProfile = ({ isLoading, setIsLoading }: MainProps) => {
 										)}
 									</div>
 								</Grid>
+							</Box>
+							<Box>
+								<StatusBlock>
+									<StatusText>Статус по заявке:</StatusText>
+									<StatusText $status={client.status}>
+										{client.processed
+											? client.status === 'ACCEPTED'
+												? 'Заявка одобрена'
+												: 'Заявка отклонена'
+											: 'Заявка еще не рассмотрена'}
+									</StatusText>
+								</StatusBlock>
 							</Box>
 						</>
 					) : (

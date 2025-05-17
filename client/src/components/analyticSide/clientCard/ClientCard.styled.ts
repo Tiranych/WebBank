@@ -4,8 +4,8 @@ import {
 	acceptColor,
 	buttonBorderColor,
 	darkColor,
-	grayColor,
 	mainBackgroundColor,
+	pinkColor,
 	refuseColor,
 } from '@utils/variables';
 
@@ -29,7 +29,7 @@ export const Title = styled.h2`
 `;
 
 export const Box = styled.div`
-	background-color: ${grayColor};
+	background-color: ${pinkColor};
 `;
 
 export const Grid = styled.div`

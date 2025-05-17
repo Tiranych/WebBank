@@ -16,6 +16,7 @@ import { Global, Overlay, Wrapper } from './App.styled';
 
 const App = () => {
 	const [showModal, setShowModal] = useState(false);
+	const [showForm, setShowForm] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isAdmin, setisAdmin] = useState(false);
 	const isAuth = useAuth();
@@ -53,6 +54,8 @@ const App = () => {
 							showModal={showModal}
 							setShowModal={setShowModal}
 							setIsLoading={setIsLoading}
+							showForm={showForm}
+							setShowForm={setShowForm}
 						/>
 						<Routes>
 							<Route
@@ -64,6 +67,7 @@ const App = () => {
 											setShowModal={setShowModal}
 											isLoading={isLoading}
 											setIsLoading={setIsLoading}
+											showForm={showForm}
 										/>
 									) : (
 										<NotAuthMain text={'Для начала работы авторизуйтесь'} />

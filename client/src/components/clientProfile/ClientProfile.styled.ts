@@ -4,8 +4,9 @@ import {
 	acceptColor,
 	buttonBorderColor,
 	darkColor,
-	grayColor,
 	mainBackgroundColor,
+	mainColor,
+	pinkColor,
 	refuseColor,
 } from '@utils/variables';
 
@@ -29,7 +30,11 @@ export const Title = styled.h2`
 `;
 
 export const Box = styled.div`
-	background-color: ${grayColor};
+	background-color: ${pinkColor};
+
+	& + & {
+		margin-top: 20px;
+	}
 `;
 
 export const Grid = styled.div`
@@ -93,4 +98,21 @@ export const Button = styled.button<{ $color: string; $margin?: boolean }>`
 	${({ $color }) => $color === 'accept' && `background-color: ${acceptColor};`}
 	${({ $color }) => $color === 'refuse' && `background-color: ${refuseColor};`}
 	${({ $margin }) => $margin && `margin-bottom: 10px;`}
+`;
+
+export const StatusBlock = styled.div`
+	display: flex;
+	gap: 0 20px;
+	padding: 20px;
+`;
+
+export const StatusText = styled.p<{ $status?: string }>`
+	padding: 10px;
+	border-radius: 5px;
+	${({ $status }) =>
+		$status
+			? $status === 'ACCEPTED'
+				? `background-color: ${acceptColor};`
+				: `background-color: ${refuseColor};`
+			: `background-color: ${mainColor};`}
 `;

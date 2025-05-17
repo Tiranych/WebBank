@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { darkColor, grayColor, mainBackgroundColor } from '@utils/variables';
+import { darkColor, mainBackgroundColor, pinkColor } from '@utils/variables';
 
 export const Wrapper = styled.main`
 	color: ${darkColor};
@@ -39,6 +39,6 @@ export const Box = styled.button`
 	width: 100%;
 	gap: 0 15px;
 	padding: 15px;
-	background-color: ${grayColor};
+	background-color: ${pinkColor};
 	font-variant-numeric: inherit;
 `;

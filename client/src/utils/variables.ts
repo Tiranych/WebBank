@@ -8,6 +8,6 @@ export const buttonBackgroundColor = 'rgba(0, 0, 0, 0.856)';
 export const cardBackgroundColor = 'rgb(161, 193, 216)';
 export const errorColor = 'rgb(204, 50, 36)';
 export const majorBlue = 'rgb(3, 155, 229)';
-export const grayColor = 'rgb(217, 202, 202)';
+export const pinkColor = 'rgb(217, 202, 202)';
 export const acceptColor = 'rgb(86, 156, 95)';
 export const refuseColor = 'rgb(168, 62, 62)';

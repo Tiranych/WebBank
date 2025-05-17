@@ -52,7 +52,11 @@ export const SigninModal = ({
 					if (response.success) {
 						localStorage.setItem('id_client', String(responseCamelized.idClient));
 						localStorage.setItem('AUTH_TOKEN', responseCamelized.authToken);
-						window.location.reload();
+						window.location.assign(
+							responseCamelized.idClient === Number(process.env.ADMIN_ID)
+								? '/analytic'
+								: '/'
+						);
 						setShowModal(false);
 					} else {
 						setErrorText(response.error);
