@@ -1,4 +1,4 @@
-import { TScoringRequest, TScoringResponse } from 'types';
+import { TScoringRequest } from 'types';
 
 export const makeScoringRequest = async (scoringData: TScoringRequest) => {
 	try {

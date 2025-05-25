@@ -16,7 +16,6 @@ router.put('/api/clients/:id', auth, updateClient);
 
 router.get('/api/credit-histories', auth, getCreditHistories);
 router.get('/api/credit-history', auth, getCreditHistoryForClient);
-//router.put("/api/credit-history/:id", updateCreditHistory);
 
 router.get('/api/check', auth, check);
 

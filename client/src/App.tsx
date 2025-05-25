@@ -11,6 +11,7 @@ import { ClientProfile } from '@components/clientProfile';
 import { Header } from '@components/clientSide/header';
 import { ClientMain } from '@components/clientSide/main';
 import { NotAuthMain } from '@components/notAuth';
+import { Spin } from '@components/shared/spin/Spin';
 
 import { Global, Overlay, Wrapper } from './App.styled';
 
@@ -49,6 +50,7 @@ const App = () => {
 				<IsAdminContext.Provider value={isAdmin}>
 					<Global />
 					<Overlay $isShowOverlay={showModal || isLoading} />
+					{isLoading && <Spin isLoading={isLoading} size={'medium'} />}
 					<Wrapper>
 						<Header
 							showModal={showModal}

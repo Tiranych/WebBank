@@ -69,6 +69,7 @@ export type DecisionOptions = {
 };
 
 export type TScoringRequest = {
+	region: number;
 	age: number;
 	income: number;
 	debt_summary: number;
@@ -76,6 +77,7 @@ export type TScoringRequest = {
 	period_total: number;
 	period_to_pay: number;
 	has_cars: number;
+	has_debts: number;
 	car_price: number;
 	has_estate: number;
 	estate_price: number;

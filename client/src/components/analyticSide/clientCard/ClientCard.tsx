@@ -109,6 +109,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 				}
 
 				const scoringData = {
+					region: 0, // Заглушка
 					age: getClientAge(client.birthdate) || 0,
 					income: client.income || 0,
 					debt_summary: clientDebts?.debtSummary || 0,
@@ -116,6 +117,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 					period_total: clientDebts?.periodTotal || 0,
 					period_to_pay: clientDebts?.periodToPay || 0,
 					has_cars: client.hasCars ? 1 : 0,
+					has_debts: client.hasDebts ? 1 : 0,
 					car_price: clientCars,
 					has_estate: client.hasEstate ? 1 : 0,
 					estate_price: clientEstates,
@@ -457,7 +459,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 											{showDiagram ? 'Скрыть графики' : 'Посмотреть графики'}
 										</Button>
 									</div>
-									{showDiagram && <Diagrams />}
+									{showDiagram && <Diagrams setIsLoading={setIsLoading} />}
 								</Row>
 								<Row $nocolor $center>
 									<Grid>
