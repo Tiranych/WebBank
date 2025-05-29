@@ -12,7 +12,7 @@ const router = Router();
 
 router.get('/api/clients', auth, getClients);
 router.get('/api/clients/:id', auth, getClientsById);
-router.put('/api/clients/:id', auth, updateClient);
+router.post('/api/clients/:id', auth, updateClient);
 
 router.get('/api/credit-histories', auth, getCreditHistories);
 router.get('/api/credit-history', auth, getCreditHistoryForClient);
