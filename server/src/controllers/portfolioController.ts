@@ -3,21 +3,15 @@ import { Request, Response } from 'express';
 import { TCredit } from 'types';
 import { camelizeData } from '../utils/decamelize';
 
-const getPortfolioQuery = async () => {
-	await db.query('BEGIN');
-
-	const result = await db.query('SELECT * FROM loan_portfolio');
-
-	await db.query('COMMIT');
-
-	return result.rows[0];
-};
-
 export const getPortfolio = async (req: Request, res: Response) => {
 	try {
-		const result = await getPortfolioQuery();
+		await db.query('BEGIN');
 
-		res.status(200).json(result);
+		const result = await db.query('SELECT * FROM loan_portfolio');
+
+		await db.query('COMMIT');
+
+		res.status(200).json(result.rows[0]);
 	} catch (err: any) {
 		res.status(500).json({ error: err.message });
 	}
@@ -31,9 +25,13 @@ export const updatePortfolio = async (req: Request, res: Response) => {
 	try {
 		await db.query('BEGIN');
 
-		const result = await getPortfolioQuery();
+		const result = await db.query('SELECT * FROM loan_portfolio');
 
-		let { totalLoans, carLoans, estateLoans, consumerLoans, totalRisk } = camelizeData(result);
+		await db.query('COMMIT');
+
+		let { totalLoans, carLoans, estateLoans, consumerLoans, totalRisk } = camelizeData(
+			result.rows[0]
+		);
 
 		if (creditPurpose === 'Потребительские цели') {
 			consumerLoans = Number(consumerLoans) + creditSummary;
@@ -47,10 +45,12 @@ export const updatePortfolio = async (req: Request, res: Response) => {
 
 		totalRisk =
 			Number(
-				((carLoans * 0.3 + estateLoans * 0.5 + consumerLoans * 0.15) / totalLoans).toFixed(
+				((carLoans * 0.1 + estateLoans * 0.15 + consumerLoans * 0.05) / totalLoans).toFixed(
 					2
 				)
 			) * 100;
+
+		await db.query('BEGIN');
 
 		await db.query(
 			`UPDATE loan_portfolio SET total_loans = $1, car_loans = $2, estate_loans = $3, consumer_loans = $4, total_risk = $5`,
