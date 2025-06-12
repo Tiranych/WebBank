@@ -32,18 +32,19 @@ import {
 	Title,
 	Wrapper,
 } from './ClientCard.styled';
-import { Diagrams } from './diagrams';
+import { AcceptModal } from './acceptModal';
 
 type MainProps = {
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	showModal: boolean;
+	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
+export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }: MainProps) => {
 	const { id } = useParams();
 	const idNum = Number(id) || -1;
 	const [isScored, setIsScored] = useState(false);
-	const [showDiagram, setShowDiagram] = useState(false);
 	const [client, setClient] = useState<TClient>();
 	const [creditHistories, setCreditHistories] = useState<TCreditHistories>();
 	const [scoringRes, setScoringRes] = useState<TScoringResponse>();
@@ -140,13 +141,8 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 		}
 	};
 
-	const diagramClick = () => {
-		setShowDiagram((prev) => !prev);
-	};
-
-	const updateClientClick = async (e: any, status: string) => {
+	const updateClientClick = async (status: string) => {
 		try {
-			setIsLoading(true);
 			if (id && scoringRes) {
 				await processClient(idNum, status);
 				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
@@ -154,11 +150,13 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 				await processClient(idNum);
 				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
 			}
-		} catch (e: any) {
-			console.log(e.message);
-		} finally {
-			setIsLoading(false);
+		} catch (err: any) {
+			console.log(err.message);
 		}
+	};
+
+	const handleAcceptClick = () => {
+		setShowModal(true);
 	};
 
 	return (
@@ -168,6 +166,14 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 					{isLoading && <Spin isLoading={isLoading} size={'medium'} />}
 					{client ? (
 						<>
+							{showModal && (
+								<AcceptModal
+									creditPurpose={client.creditConditions.purpose}
+									setIsLoading={setIsLoading}
+									updateClientClick={updateClientClick}
+									setShowModal={setShowModal}
+								/>
+							)}
 							<Title>Карточка клиента</Title>
 							<Box>
 								<Grid>
@@ -441,7 +447,7 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 										{isScored && (
 											<Row $direction='column' $nopadding $center>
 												<Text>
-													Результаты скоринга: {scoringRes?.decision}
+													Результат скоринга: {scoringRes?.decision}
 												</Text>
 												<Text>
 													Риск невыплаты кредита составляет:{' '}
@@ -453,25 +459,14 @@ export const ClientCard = ({ isLoading, setIsLoading }: MainProps) => {
 										)}
 									</div>
 								</Row>
-								<Row $nocolor>
-									<div>
-										<Button $color={'scoring'} onClick={diagramClick}>
-											{showDiagram ? 'Скрыть графики' : 'Посмотреть графики'}
-										</Button>
-									</div>
-									{showDiagram && <Diagrams setIsLoading={setIsLoading} />}
-								</Row>
 								<Row $nocolor $center>
 									<Grid>
-										<Button
-											$color={'accept'}
-											onClick={(e) => updateClientClick(e, 'ACCEPTED')}
-										>
+										<Button $color={'accept'} onClick={handleAcceptClick}>
 											Одобрить
 										</Button>
 										<Button
 											$color={'refuse'}
-											onClick={(e) => updateClientClick(e, 'REJECTED')}
+											onClick={(e) => updateClientClick('REJECTED')}
 										>
 											Отказать
 										</Button>

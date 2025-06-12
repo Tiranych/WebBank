@@ -30,9 +30,17 @@ export type TCreditHistory = {
 
 type TCreditConditions = {
 	period: number;
-	purpose: string;
+	purpose: TPurpose;
 	repaymentSchedule: string;
 	summary: number;
+};
+
+export type TPurpose = 'Потребительские цели' | 'Покупка транспорта' | 'Покупка недвижимости';
+
+export type TCredit = {
+	creditSummary: number;
+	creditPeriod: number;
+	creditRepaymentSchedule: string;
 };
 
 export type TClient = {
@@ -109,3 +117,12 @@ export type TAuthResponse = {
 
 export type TClients = TClient[];
 export type TCreditHistories = TCreditHistory[];
+
+export type TPortfolio = {
+	idLoan: number;
+	totalLoans: string;
+	carLoans: string;
+	estateLoans: string;
+	consumerLoans: string;
+	totalRisk: number;
+};

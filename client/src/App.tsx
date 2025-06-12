@@ -6,11 +6,12 @@ import { IDClientContext, IsAdminContext, useAuth } from '@contexts/index';
 import { checkAdmin } from '@services/checkAdmin';
 
 import { ClientCard } from '@components/analyticSide/clientCard';
+import { Diagrams } from '@components/analyticSide/diagrams';
 import { AnalyticMain } from '@components/analyticSide/main';
 import { ClientProfile } from '@components/clientProfile';
-import { Header } from '@components/clientSide/header';
 import { ClientMain } from '@components/clientSide/main';
 import { NotAuthMain } from '@components/notAuth';
+import { Header } from '@components/shared/header';
 import { Spin } from '@components/shared/spin/Spin';
 
 import { Global, Overlay, Wrapper } from './App.styled';
@@ -75,7 +76,7 @@ const App = () => {
 										<NotAuthMain text={'Для начала работы авторизуйтесь'} />
 									)
 								}
-							></Route>
+							/>
 							<Route
 								path='/profile/:id'
 								element={
@@ -88,7 +89,7 @@ const App = () => {
 										<NotAuthMain text={'Для начала работы авторизуйтесь'} />
 									)
 								}
-							></Route>
+							/>
 							<Route
 								path='/analytic'
 								element={
@@ -101,7 +102,7 @@ const App = () => {
 										<NotAuthMain text={'Страница недоступна'} />
 									)
 								}
-							></Route>
+							/>
 							<Route
 								path='/client/:id'
 								element={
@@ -109,12 +110,24 @@ const App = () => {
 										<ClientCard
 											isLoading={isLoading}
 											setIsLoading={setIsLoading}
+											showModal={showModal}
+											setShowModal={setShowModal}
 										/>
 									) : (
 										<NotAuthMain text={'Страница недоступна'} />
 									)
 								}
-							></Route>
+							/>
+							<Route
+								path='/diagrams'
+								element={
+									isAdmin && isAuth ? (
+										<Diagrams setIsLoading={setIsLoading} />
+									) : (
+										<NotAuthMain text={'Страница недоступна'} />
+									)
+								}
+							/>
 						</Routes>
 					</Wrapper>
 				</IsAdminContext.Provider>

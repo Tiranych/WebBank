@@ -1,8 +1,13 @@
 import styled from 'styled-components';
 
-export const Section = styled.section``;
+import { darkColor } from '@utils/variables';
+
+export const Section = styled.section`
+	color: ${darkColor};
+`;
 
 export const Wrapper = styled.div`
+	padding-top: 50px;
 	display: flex;
 	gap: 50px;
 `;

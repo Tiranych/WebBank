@@ -78,6 +78,11 @@ const Header = ({ showModal, setShowModal, setIsLoading, showForm, setShowForm }
 									<Link to={`/`}>Вернуться назад</Link>
 								</Box>
 							)}
+							{isAdmin && path !== '/diagrams' && (
+								<Box>
+									<Link to={`/diagrams`}>Посмотреть диаграммы</Link>
+								</Box>
+							)}
 							<Button onClick={handleExitClick}>Выйти</Button>
 						</NavInner>
 					)}
