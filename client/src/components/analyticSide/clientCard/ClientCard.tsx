@@ -143,7 +143,7 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 
 	const updateClientClick = async (status: string) => {
 		try {
-			if (id && scoringRes) {
+			if (id) {
 				await processClient(idNum, status);
 				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
 			} else if (id) {
