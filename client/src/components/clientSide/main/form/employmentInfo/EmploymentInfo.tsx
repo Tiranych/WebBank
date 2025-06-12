@@ -168,11 +168,6 @@ export const EmploymentInfo = ({ step }: { step: number }) => {
 											id='workaddress'
 											placeholder='Адрес организации'
 											$longInput
-											onChange={(e) => {
-												const cyrillicAndDigitsOnly =
-													e.target.value.replace(/[^А-ЯЁа-яё 0-9]/g, '');
-												field.onChange(cyrillicAndDigitsOnly);
-											}}
 										/>
 										<ErrorText $enabled={!!error}>{error?.message}</ErrorText>
 									</Wrapper>

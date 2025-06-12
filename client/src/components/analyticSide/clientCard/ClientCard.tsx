@@ -146,9 +146,6 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 			if (id) {
 				await processClient(idNum, status);
 				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
-			} else if (id) {
-				await processClient(idNum);
-				window.location.assign(`http://${process.env.HOST_NAME}/analytic`);
 			}
 		} catch (err: any) {
 			console.log(err.message);
