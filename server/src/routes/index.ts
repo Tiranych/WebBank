@@ -7,6 +7,8 @@ import {
 import { handleFormController } from '../controllers/handleFormController';
 import { scoringController } from '../controllers/scoringController';
 import { signup, signin, auth, check } from '../controllers/authController';
+import { creditController } from '../controllers/creditController';
+import { getPortfolio, updatePortfolio } from '../controllers/portfolioController';
 
 const router = Router();
 
@@ -23,5 +25,10 @@ router.post('/api/predict', auth, scoringController);
 router.post('/form', auth, handleFormController);
 router.post('/signup', signup);
 router.post('/signin', signin);
+
+router.post('/api/credit/create', auth, creditController);
+
+router.get('/api/get/portfolio', auth, getPortfolio);
+router.put('/api/update/portfolio', auth, updatePortfolio);
 
 export default router;

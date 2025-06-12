@@ -32,6 +32,12 @@ type TCreditConditions = {
 	summary: number;
 };
 
+export type TCredit = {
+	creditSummary: number;
+	creditPeriod: number;
+	creditRepaymentSchedule: string;
+};
+
 export type TClient = {
 	address: string;
 	assetsCar: TAssetCar[];

@@ -1,7 +1,7 @@
 import humps from 'humps';
 
 export const camelizeData = (data: any) => {
-	let res: any = {};
+	let res: { [key: string]: any } = {};
 	Object.entries(data).forEach((entry) => {
 		res[`${humps.camelize(entry[0])}`] = entry[1];
 	});
@@ -10,7 +10,7 @@ export const camelizeData = (data: any) => {
 };
 
 export const decamelizeData = (data: any) => {
-	let res: any = {};
+	let res: { [key: string]: any } = {};
 	if (data) {
 		Object.entries(data).forEach((entry) => {
 			res[`${humps.decamelize(entry[0])}`] = entry[1];

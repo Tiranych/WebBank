@@ -74,17 +74,3 @@ export async function createCreditHistory(data: TClient, idClient: number) {
 
 	await db.query('COMMIT');
 }
-
-/* export async function updateCreditHistory(req: Request, res: Response) {
-  const { id } = req.params;
-  const { idClient, idContract } = req.body;
-  try {
-    const result = await db.query(
-      "UPDATE contract SET id_client = $1, id_contract = $2 WHERE id_credit = $3",
-      [idClient, idContract, id]
-    );
-    res.status(200).json(result.rows[0]);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-} */
