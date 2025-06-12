@@ -463,7 +463,9 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 										</Button>
 										<Button
 											$color={'refuse'}
-											onClick={(e) => updateClientClick('REJECTED')}
+											onClick={async (e) =>
+												await updateClientClick('REJECTED')
+											}
 										>
 											Отказать
 										</Button>
