@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { TClient, TCreditHistories, TCreditHistory, TScoringResponse } from 'types';
+import { TActiveLoan, TClient, TCreditHistories, TCreditHistory, TScoringResponse } from 'types';
 
+import { getActiveLoansById } from '@services/getActiveLoansById';
 import { getClientsById } from '@services/getClientsById';
 import { getCreditHistoryById } from '@services/getCreditHistoryById';
 import { makeScoringRequest } from '@services/makeScoringRequest';
@@ -37,8 +38,8 @@ import { AcceptModal } from './acceptModal';
 type MainProps = {
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	showModal: boolean;
-	setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+	showModal?: boolean;
+	setShowModal?: React.Dispatch<React.SetStateAction<boolean>>; // если передана, значит компонент вызван для необработанного клиента
 };
 
 export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }: MainProps) => {
@@ -48,6 +49,7 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 	const [client, setClient] = useState<TClient>();
 	const [creditHistories, setCreditHistories] = useState<TCreditHistories>();
 	const [scoringRes, setScoringRes] = useState<TScoringResponse>();
+	const [activeLoan, setActiveLoan] = useState<TActiveLoan>();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -58,6 +60,11 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 					const clientRes = await getClientsById(idNum);
 					const camelizedClient = camelizeData<TClient>(clientRes);
 					setClient(camelizedClient[0]);
+					if (!setShowModal) {
+						const activeLoanRes = await getActiveLoansById(idNum);
+						const camelizedActiveLoan = camelizeData<TActiveLoan>(activeLoanRes);
+						setActiveLoan(camelizedActiveLoan[0]);
+					}
 				}
 			} catch (error) {
 				console.error(error);
@@ -153,7 +160,7 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 	};
 
 	const handleAcceptClick = () => {
-		setShowModal(true);
+		setShowModal && setShowModal(true);
 	};
 
 	return (
@@ -163,7 +170,7 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 					{isLoading && <Spin isLoading={isLoading} size={'medium'} />}
 					{client ? (
 						<>
-							{showModal && (
+							{showModal && setShowModal && (
 								<AcceptModal
 									creditPurpose={client.creditConditions.purpose}
 									setIsLoading={setIsLoading}
@@ -434,43 +441,84 @@ export const ClientCard = ({ isLoading, setIsLoading, showModal, setShowModal }:
 												<p>Нет долгов</p>
 											</Row>
 										)}
-									</div>
-								</Grid>
-								<Row $between $nocolor>
-									<div>
-										<Button $margin $color={'scoring'} onClick={scoringClick}>
-											Скоринг
-										</Button>
-										{isScored && (
-											<Row $direction='column' $nopadding $center>
-												<Text>
-													Результат скоринга: {scoringRes?.decision}
-												</Text>
-												<Text>
-													Риск невыплаты кредита составляет:{' '}
-													{scoringRes &&
-														(scoringRes.riskScore * 100).toFixed(2) +
-															'%'}
-												</Text>
+										{!setShowModal && activeLoan && (
+											<Row $accept $direction={'column'}>
+												<Text>Одобренная заявка:</Text>
+												{
+													<Inner>
+														<Item>
+															<p>Сумма:</p>
+															<p>
+																{(
+																	activeLoan.creditSummary / 1000
+																).toFixed(1)}{' '}
+																тыс. рублей
+															</p>
+														</Item>
+														<Item>
+															<p>Срок погашения:</p>
+															<p>{activeLoan.creditPeriod} мес.</p>
+														</Item>
+														<Item>
+															<p>График платежей:</p>
+															<p>
+																{activeLoan.creditRepaymentSchedule}
+															</p>
+														</Item>
+													</Inner>
+												}
 											</Row>
 										)}
 									</div>
-								</Row>
-								<Row $nocolor $center>
-									<Grid>
-										<Button $color={'accept'} onClick={handleAcceptClick}>
-											Одобрить
-										</Button>
-										<Button
-											$color={'refuse'}
-											onClick={async (e) =>
-												await updateClientClick('REJECTED')
-											}
-										>
-											Отказать
-										</Button>
-									</Grid>
-								</Row>
+								</Grid>
+								{setShowModal && (
+									<>
+										<Row $between $nocolor>
+											<div>
+												<Button
+													$margin
+													$color={'scoring'}
+													onClick={scoringClick}
+												>
+													Скоринг
+												</Button>
+												{isScored && (
+													<Row $direction='column' $nopadding $center>
+														<Text>
+															Результат скоринга:{' '}
+															{scoringRes?.decision}
+														</Text>
+														<Text>
+															Риск невыплаты кредита составляет:{' '}
+															{scoringRes &&
+																(
+																	scoringRes.riskScore * 100
+																).toFixed(2) + '%'}
+														</Text>
+													</Row>
+												)}
+											</div>
+										</Row>
+										<Row $nocolor $center>
+											<Grid>
+												<Button
+													$color={'accept'}
+													onClick={handleAcceptClick}
+												>
+													Одобрить
+												</Button>
+												<Button
+													$color={'refuse'}
+													onClick={async (e) =>
+														await updateClientClick('REJECTED')
+													}
+												>
+													Отказать
+												</Button>
+											</Grid>
+										</Row>
+									</>
+								)}
 							</Box>
 						</>
 					) : (

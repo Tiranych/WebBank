@@ -119,6 +119,19 @@ const App = () => {
 								}
 							/>
 							<Route
+								path='/client/active/:id'
+								element={
+									isAuth && isAdmin ? (
+										<ClientCard
+											isLoading={isLoading}
+											setIsLoading={setIsLoading}
+										/>
+									) : (
+										<NotAuthMain text={'Страница недоступна'} />
+									)
+								}
+							/>
+							<Route
 								path='/diagrams'
 								element={
 									isAdmin && isAuth ? (

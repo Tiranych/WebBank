@@ -126,3 +126,11 @@ export type TPortfolio = {
 	consumerLoans: string;
 	totalRisk: number;
 };
+
+export type TActiveLoan = {
+	idLoan: number;
+	idClient: number;
+	creditSummary: number;
+	creditPeriod: number;
+	creditRepaymentSchedule: string;
+};

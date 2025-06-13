@@ -10,7 +10,17 @@ import { Spin } from '@components/shared/spin/Spin';
 
 import { camelizeData } from '@utils/camelize';
 
-import { Box, Inner, Section, SectionBody, Subtitle, Text, Title, Wrapper } from './Main.styled';
+import {
+	Box,
+	FlexBox,
+	Inner,
+	Section,
+	SectionBody,
+	Subtitle,
+	Text,
+	Title,
+	Wrapper,
+} from './Main.styled';
 
 type MainProps = {
 	isLoading: boolean;
@@ -42,6 +52,7 @@ export const AnalyticMain = ({ isLoading, setIsLoading }: MainProps) => {
 	}, []);
 
 	const clientsToProcess = clients.filter((client) => !client.processed);
+	const acceptedClients = clients.filter((client) => client.status === 'ACCEPTED');
 
 	return (
 		<Wrapper>
@@ -71,38 +82,69 @@ export const AnalyticMain = ({ isLoading, setIsLoading }: MainProps) => {
 										}}
 									>
 										<Box>
-											{client.lastname +
-												' ' +
-												client.firstname +
-												' ' +
-												client.patronymic}
+											<Text>
+												{client.lastname +
+													' ' +
+													client.firstname +
+													' ' +
+													client.patronymic}
+											</Text>
 										</Box>
 									</Link>
 								))}
 							</Inner>
 						</div>
-						<div>
-							<Subtitle>Кредитный портфель</Subtitle>
-							{portfolio && (
+						<FlexBox>
+							<div>
+								<Subtitle>Кредитный портфель</Subtitle>
+								{portfolio && (
+									<Inner>
+										<Box $nocursor>
+											<Text>{`Объём кредитного портфеля: ${(Number(portfolio.totalLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
+										</Box>
+										<Box $nocursor>
+											<Text>{`Кредиты на транспорт в порфтеле: ${(Number(portfolio.carLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
+										</Box>
+										<Box $nocursor>
+											<Text>{`Кредиты на недвижимость в порфтеле: ${(Number(portfolio.estateLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
+										</Box>
+										<Box $nocursor>
+											<Text>{`Кредиты на потребительские цели в порфтеле: ${(Number(portfolio.consumerLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
+										</Box>
+										<Box $nocursor>
+											<Text>{`Риск кредитного портфеля: ${portfolio.totalRisk}%`}</Text>
+										</Box>
+									</Inner>
+								)}
+							</div>
+							<div>
+								<Subtitle>Действующие кредитные линии</Subtitle>
 								<Inner>
-									<Box $nocursor>
-										<Text>{`Общий объем кредитного портфеля: ${(Number(portfolio.totalLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
-									</Box>
-									<Box $nocursor>
-										<Text>{`Объем кредитов на транспорт в порфтеле: ${(Number(portfolio.carLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
-									</Box>
-									<Box $nocursor>
-										<Text>{`Объем кредитов на недвижимость в порфтеле: ${(Number(portfolio.estateLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
-									</Box>
-									<Box $nocursor>
-										<Text>{`Объем кредитов на потребительские цели в порфтеле: ${(Number(portfolio.consumerLoans) / 1000).toFixed(1)} тыс. рублей`}</Text>
-									</Box>
-									<Box $nocursor>
-										<Text>{`Объем риска кредитного портфеля: ${portfolio.totalRisk}%`}</Text>
-									</Box>
+									{acceptedClients.map((client) => (
+										<Link
+											key={client.idClient}
+											to={`/client/active/${client.idClient}`}
+											style={{
+												display: 'flex',
+												justifyContent: 'center',
+												alignItems: 'center',
+												width: '100%',
+											}}
+										>
+											<Box>
+												<Text>
+													{client.lastname +
+														' ' +
+														client.firstname +
+														' ' +
+														client.patronymic}
+												</Text>
+											</Box>
+										</Link>
+									))}
 								</Inner>
-							)}
-						</div>
+							</div>
+						</FlexBox>
 					</SectionBody>
 				</Container>
 			</Section>

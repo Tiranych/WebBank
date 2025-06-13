@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { getClients, updateClient, getClientsById } from '../controllers/clientController';
+import {
+	getClients,
+	updateClient,
+	getClientsById,
+	getActiveClientsById,
+} from '../controllers/clientController';
 import {
 	getCreditHistoryForClient,
 	getCreditHistories,
@@ -14,6 +19,7 @@ const router = Router();
 
 router.get('/api/clients', auth, getClients);
 router.get('/api/clients/:id', auth, getClientsById);
+router.get('/api/clients/active/:id', auth, getActiveClientsById);
 router.post('/api/clients/:id', auth, updateClient);
 
 router.get('/api/credit-histories', auth, getCreditHistories);

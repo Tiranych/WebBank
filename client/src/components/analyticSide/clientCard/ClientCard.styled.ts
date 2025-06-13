@@ -50,6 +50,7 @@ export const Inner = styled.ul`
 `;
 
 export const Row = styled.div<{
+	$accept?: boolean;
 	$direction?: string;
 	$center?: boolean;
 	$between?: boolean;
@@ -67,6 +68,7 @@ export const Row = styled.div<{
 	${({ $between }) => $between && 'justify-content: space-between;'}
 	${({ $nopadding }) => $nopadding && 'margin: 0px;'}
 	${({ $nocolor }) => $nocolor && 'background-color: inherit;'}
+	${({ $accept }) => $accept && `background-color: ${acceptColor};`}
 `;
 
 export const Text = styled.p`

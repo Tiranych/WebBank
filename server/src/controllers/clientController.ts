@@ -33,6 +33,22 @@ export async function getClientsById(req: Request, res: Response) {
 	}
 }
 
+export async function getActiveClientsById(req: Request, res: Response) {
+	const { id } = req.params;
+
+	try {
+		await db.query('BEGIN');
+
+		const result = await db.query('SELECT * FROM active_loans WHERE id_client = $1', [id]);
+
+		await db.query('COMMIT');
+
+		res.status(200).json(result.rows);
+	} catch (err: any) {
+		res.status(500).json({ error: err.message });
+	}
+}
+
 export async function createClient(id: number, data: TClient) {
 	try {
 		await db.query('BEGIN');

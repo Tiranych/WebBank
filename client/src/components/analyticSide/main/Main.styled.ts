@@ -19,15 +19,21 @@ export const SectionBody = styled.div`
 	width: 90vw;
 `;
 
+export const FlexBox = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 30px 0;
+`;
+
 export const Title = styled.h2`
 	font-size: 48px;
 	line-height: 40px;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 	text-align: center;
 `;
 
 export const Subtitle = styled.h4`
-	font-size: 30px;
+	font-size: 34px;
 	text-align: center;
 	margin-bottom: 15px;
 `;
@@ -60,6 +66,7 @@ export const Box = styled.button<{ $nocursor?: boolean }>`
 	${({ $nocursor }) =>
 		$nocursor &&
 		css`
+			justify-content: flex-start;
 			pointer-events: none;
 			cursor: default;
 		`}
